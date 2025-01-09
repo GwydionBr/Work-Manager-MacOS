@@ -48,6 +48,7 @@ struct TimeTrackerView: View {
                 .padding()
             } else if timeTracker.isTimerActive && timeTracker.isRunning {
                 HStack {
+                    Spacer()
                     Button {
                         timeTracker.pauseTimer()
                     } label: {
@@ -60,12 +61,14 @@ struct TimeTrackerView: View {
                     Button {
                         let newSession = timeTracker.stopTimer()
                         project.sessions.append(newSession)
+                        
                     } label: {
                         TimerButtonLayout(type: .stop)
                     }
                     .background(Color.clear)
                     .buttonStyle(PlainButtonStyle())
                     .padding()
+                    Spacer()
                 }
             } else if timeTracker.isTimerActive && !timeTracker.isRunning {
                 Button {

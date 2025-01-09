@@ -106,6 +106,8 @@ class TimeTracker: ObservableObject {
         salary = 0.0
         moneyEarned = "0.00"
         isTimerActive = false
+        activeTime = "00:00"
+        pausedTime = "00:00"
     }
 }
 
