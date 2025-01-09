@@ -28,9 +28,6 @@ class TimerData: ObservableObject {
     ]
     
     @Published var settings = TimerSettings()
-    @Published var sortFavorites = true
-    @Published var sortSalary = false
-    @Published var sortName = false
     
     func add(_ project: TimerProject) {
         projects.append(project)
@@ -41,6 +38,20 @@ class TimerData: ObservableObject {
             projects.remove(at: index)
         }
     }
+    
+    func startTimer(for project: TimerProject) {
+        if let index = projects.firstIndex(where: { $0.id == project.id }) {
+            projects[index].sessions.append(TimerSession(activeTime: 0, pausedTime: 0, startTime: Date(), endTime: Date(), salary: project.salary))
+        }
+    }
+    
+}
+
+
+//MARK: - Sorting Functions
+
+
+extension TimerData {
     
     func sortProjects() -> Binding<[TimerProject]> {
         Binding<[TimerProject]>(
@@ -55,19 +66,11 @@ class TimerData: ObservableObject {
                 default:
                     return self.projects
                 }
-//                if self.sortFavorites {
-//                    return self.sortedProjectFavorite().wrappedValue
-//                } else if self.sortSalary {
-//                    return self.sortedProjectSalary().wrappedValue
-//                } else if self.sortName {
-//                    return self.sortedProjectName().wrappedValue
-//                } else {
-//                    return self.projects
-//                }
             },
             set: { self.projects = $0 }
         )
     }
+    
     
     func sortedProjectName() -> Binding<[TimerProject]> {
         Binding<[TimerProject]>(
@@ -89,7 +92,13 @@ class TimerData: ObservableObject {
             set: { self.projects = $0 }
         )
     }
-    
+}
+
+
+// MARK: - Data Handling
+
+
+extension TimerData {
     
     private static func getTimerProjectsFileURL() throws -> URL {
             FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -118,3 +127,4 @@ class TimerData: ObservableObject {
             }
         }
 }
+

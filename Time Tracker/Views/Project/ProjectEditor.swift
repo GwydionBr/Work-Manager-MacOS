@@ -27,6 +27,7 @@ struct ProjectEditor: View {
                     }
                 }
                 
+                
                 TextField("Hourly Rate", value: $project.salary, format: .number)
             }
         }
