@@ -10,20 +10,20 @@ import SwiftUI
 class TimerData: ObservableObject {
     @Published var projects: [TimerProject] = [
         TimerProject(title: "Argon", description: "🇩🇪 German 🇩🇪", salary: 30.0, currency: "$", sessions: [
-            TimerSession(activeTime: 300, pausedTime: 0, startTime: Date(), endTime: Date(), salary: 30.0),
-            TimerSession(activeTime: 500, pausedTime: 0, startTime: Date(), endTime: Date(), salary: 30.0),
+            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0),
+            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0),
         ]),
         TimerProject(title: "Hera", description: "Evaluate 2 AI Responses", salary: 16.0, currency: "$", sessions: [
-            TimerSession(activeTime: 300, pausedTime: 0, startTime: Date(), endTime: Date(), salary: 16.0),
-            TimerSession(activeTime: 500, pausedTime: 0, startTime: Date(), endTime: Date(), salary: 16.0),
+            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0),
+            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0),
         ]),
         TimerProject(title: "Tango", description: "Rate responses as safe / unsafe", salary: 26.0, currency: "$", sessions: [
-            TimerSession(activeTime: 300, pausedTime: 0, startTime: Date(), endTime: Date(), salary: 26.0),
-            TimerSession(activeTime: 500, pausedTime: 0, startTime: Date(), endTime: Date(), salary: 26.0),
+            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0),
+            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0),
         ]),
         TimerProject(title: "Sia", description: "Evaluate AI Responses", salary: 33.0, currency: "€", sessions: [
-            TimerSession(activeTime: 300, pausedTime: 0, startTime: Date(), endTime: Date(), salary: 33.0),
-            TimerSession(activeTime: 500, pausedTime: 0, startTime: Date(), endTime: Date(), salary: 33.0),
+            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0),
+            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0),
         ]),
     ]
     
@@ -41,7 +41,7 @@ class TimerData: ObservableObject {
     
     func startTimer(for project: TimerProject) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
-            projects[index].sessions.append(TimerSession(activeTime: 0, pausedTime: 0, startTime: Date(), endTime: Date(), salary: project.salary))
+            projects[index].sessions.append(TimerSession(activeSeconds: 0, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: project.salary))
         }
     }
     

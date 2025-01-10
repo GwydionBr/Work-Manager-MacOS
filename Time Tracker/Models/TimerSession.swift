@@ -9,8 +9,8 @@ import Foundation
 
 struct TimerSession : Codable, Identifiable, Hashable {
     var id = UUID()
-    var activeTime = 0 // in seconds
-    var pausedTime = 0 // in seconds
+    var activeSeconds = 0
+    var pausedSeconds = 0
     var startTime = Date.now
     var endTime = Date.now
     var salary = 0.0  // in $/h
@@ -23,8 +23,15 @@ struct TimerSession : Codable, Identifiable, Hashable {
         return dateFormatter.string(from: startTime)
     }
     
+    func getTimeSpan() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "de_DE")
+        dateFormatter.dateFormat = "HH:mm"
+        return dateFormatter.string(from: startTime) + " - " + dateFormatter.string(from: endTime)
+    }
+    
     func getEarnedMoney() -> String {
-        let value = Double(activeTime) * salary / 3600
-        return String(format: "%.2f", value) + " " + currency
+        let value = Double(activeSeconds) * salary / 3600
+        return String(format: "%.2f", value)
     }
 }
