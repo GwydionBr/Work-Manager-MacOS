@@ -47,7 +47,7 @@ class TimeTracker: ObservableObject {
         isTimerActive = true
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.activeSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedActiveSeconds
-            self.activeTime = self.formatTimeInterval(self.activeSeconds)
+            self.activeTime = formatTimerSeconds(Int(self.activeSeconds))
             self.setMoneyEarned()
         }
     }
@@ -61,7 +61,7 @@ class TimeTracker: ObservableObject {
         isRunning = false
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.pausedSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedPausedSeconds
-            self.pausedTime = self.formatTimeInterval(self.pausedSeconds)
+            self.pausedTime = formatTimerSeconds(Int(self.pausedSeconds))
         }
     }
     
@@ -74,7 +74,7 @@ class TimeTracker: ObservableObject {
         isRunning = true
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.activeSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedActiveSeconds
-            self.activeTime = self.formatTimeInterval(self.activeSeconds)
+            self.activeTime = formatTimerSeconds(Int(self.activeSeconds))
             self.setMoneyEarned()
         }
     }
@@ -83,8 +83,8 @@ class TimeTracker: ObservableObject {
     func stopTimer() -> TimerSession {
         endTime = Date()
         newSession = TimerSession(
-            activeTime: Int(activeSeconds),
-            pausedTime: Int(pausedSeconds),
+            activeSeconds: Int(activeSeconds),
+            pausedSeconds: Int(pausedSeconds),
             startTime: startTime,
             endTime: endTime,
             salary: salary,
@@ -123,20 +123,7 @@ extension TimeTracker {
     }
     
     
-    func formatTimeInterval(_ interval: TimeInterval) -> String {
-        let totalSeconds = Int(interval)
-        let hours = totalSeconds / 3600
-        let minutes = (totalSeconds % 3600) / 60
-        let seconds = totalSeconds % 60
-        
-        if hours > 0 {
-            // Format mit Stunden
-            return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
-        } else {
-            // Format ohne Stunden
-            return String(format: "%02d:%02d", minutes, seconds)
-        }
-    }
+    
     
     
 }
