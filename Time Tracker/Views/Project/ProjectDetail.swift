@@ -15,18 +15,20 @@ struct ProjectDetail: View {
         HSplitView {
             // Linke Ansicht
             SessionList(timerData: TimerData(), project: $project)
-                .frame(minWidth: 200, maxWidth: .infinity, maxHeight: .infinity) // Flexible Breite
+                .frame(minWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.gray.opacity(0.2))
-                .layoutPriority(1) // Priorität erhöhen
+                .layoutPriority(1) // Höhere Priorität, damit diese Ansicht weniger Platz verliert
 
             // Rechte Ansicht
             TimeTrackerView(project: $project)
-                .frame(minWidth: 200, maxWidth: .infinity, maxHeight: .infinity) // Flexible Breite
+                .frame(minWidth: 300, maxWidth: .infinity, maxHeight: .infinity)
+                .layoutPriority(2) // Höhere Priorität für TimeTrackerView, um mehr Platz zu bekommen
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationTitle("\(project.title) - \(project.description)")
     }
 }
+
 
 //        HStack {
 //            SessionList(timerData: TimerData(), project: $project)

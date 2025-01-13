@@ -60,7 +60,7 @@ struct TimeTrackerView: View {
                     Spacer()
                     Button {
                         let newSession = timeTracker.stopTimer()
-                        project.sessions.append(newSession)
+                        project.timerSession.append(newSession)
                         
                     } label: {
                         TimerButtonLayout(type: .stop)

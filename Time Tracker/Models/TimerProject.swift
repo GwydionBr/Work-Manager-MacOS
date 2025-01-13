@@ -11,10 +11,10 @@ struct TimerProject: Codable, Identifiable, Hashable {
     var id = UUID()
     var title = ""
     var description = ""
-    var salary = 0.0
+    var salary  = 0.0
     var currency = "$"
     var isFavorite = false
-    var sessions: [TimerSession] = []
+    var timerSession: [TimerSession] = []
     
     func getSalary() -> String {
         return roundToMaxTwoDecimals(number: salary)

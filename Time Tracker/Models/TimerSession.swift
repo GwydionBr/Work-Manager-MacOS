@@ -9,12 +9,13 @@ import Foundation
 
 struct TimerSession : Codable, Identifiable, Hashable {
     var id = UUID()
-    var activeSeconds = 0
-    var pausedSeconds = 0
-    var startTime = Date.now
-    var endTime = Date.now
-    var salary = 0.0  // in $/h
-    var currency = "$"
+    var activeSeconds: Int
+    var pausedSeconds: Int
+    var startTime: Date
+    var endTime: Date
+    var salary: Double  // in $/h
+    var currency: String
+    var projectId = UUID()
     
     func getDate() -> String {
         let dateFormatter = DateFormatter()

@@ -26,8 +26,6 @@ class TimeTracker: ObservableObject {
     var pausedSeconds: TimeInterval = 0
     var storedPausedSeconds: TimeInterval = 0
     
-    var newSession = TimerSession()
-    
     private var timer: Timer?
     
     
@@ -82,7 +80,7 @@ class TimeTracker: ObservableObject {
     
     func stopTimer() -> TimerSession {
         endTime = Date()
-        newSession = TimerSession(
+        let newSession = TimerSession(
             activeSeconds: Int(activeSeconds),
             pausedSeconds: Int(pausedSeconds),
             startTime: startTime,
@@ -121,9 +119,4 @@ extension TimeTracker {
         let value = self.activeSeconds * self.salary / 3600
         self.moneyEarned =  String(format: "%.2f", value)
     }
-    
-    
-    
-    
-    
 }

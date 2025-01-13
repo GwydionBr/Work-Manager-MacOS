@@ -15,12 +15,16 @@ struct Time_TrackerApp: App {
         WindowGroup {
             ProjectList(timerData: timerData)
                 .onAppear {
-                    timerData.load()
+                    Task {
+                        await timerData.loadOnlineProjects()
+                    }
                 }
-                .onDisappear {
-                    timerData.save()
-                }
-            
+//                .onDisappear {
+//                    Task {
+//                        await timerData.addProject()
+//                    }
+//                }
+//            TestView()
         }
     }
 }

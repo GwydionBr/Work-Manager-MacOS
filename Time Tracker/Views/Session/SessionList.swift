@@ -16,7 +16,7 @@ struct SessionList: View {
 
     // Helper function to generate the grouped sessions
     var groupedSessions: [Int: [Int: [Int: [Date: [TimerSession]]]]]? {
-        Dictionary(grouping: project.sessions) { session in
+        Dictionary(grouping: project.timerSession) { session in
             Calendar.current.component(.year, from: session.startTime)
         }.mapValues { sessionsByYear in
             Dictionary(grouping: sessionsByYear) { session in
@@ -115,8 +115,8 @@ struct SessionList: View {
                 SessionRow(session: Binding(
                     get: { session },
                     set: { updatedSession in
-                        if let index = project.sessions.firstIndex(where: { $0.id == session.id }) {
-                            project.sessions[index] = updatedSession
+                        if let index = project.timerSession.firstIndex(where: { $0.id == session.id }) {
+                            project.timerSession[index] = updatedSession
                         }
                     }
                 ))
@@ -175,7 +175,7 @@ struct SessionList: View {
         expandedMonths.insert(currentMonth)
 
         // Find all sessions for today and expand the day if found
-        if project.sessions.contains(where: { Calendar.current.isDate($0.startTime, inSameDayAs: today) }) {
+        if project.timerSession.contains(where: { Calendar.current.isDate($0.startTime, inSameDayAs: today) }) {
             expandedDays.insert(today)
         }
     }

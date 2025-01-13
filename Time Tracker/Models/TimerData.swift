@@ -9,25 +9,28 @@ import SwiftUI
 
 class TimerData: ObservableObject {
     @Published var projects: [TimerProject] = [
-        TimerProject(title: "Argon", description: "🇩🇪 German 🇩🇪", salary: 30.0, currency: "$", sessions: [
-            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0),
-            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0),
+        TimerProject(title: "Argon", description: "🇩🇪 German 🇩🇪", salary: 30.0, currency: "$", isFavorite: false, timerSession: [
+            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
+            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
         ]),
-        TimerProject(title: "Hera", description: "Evaluate 2 AI Responses", salary: 16.0, currency: "$", sessions: [
-            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0),
-            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0),
+        TimerProject(title: "Hera", description: "Evaluate 2 AI Responses", salary: 16.0, currency: "$", isFavorite: false, timerSession: [
+            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
+            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
         ]),
-        TimerProject(title: "Tango", description: "Rate responses as safe / unsafe", salary: 26.0, currency: "$", sessions: [
-            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0),
-            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0),
+        TimerProject(title: "Tango", description: "Rate responses as safe / unsafe", salary: 26.0, currency: "$", isFavorite: false, timerSession: [
+            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
+            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
         ]),
-        TimerProject(title: "Sia", description: "Evaluate AI Responses", salary: 33.0, currency: "€", sessions: [
-            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0),
-            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0),
+        TimerProject(title: "Sia", description: "Evaluate AI Responses", salary: 33.0, currency: "€", isFavorite: false, timerSession: [
+            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
+            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
         ]),
     ]
     
     @Published var settings = TimerSettings()
+    
+    private var supabaseDataStore = SupabaseDataStore()
+    private var localDataStore = LocalDataStore()
     
     func add(_ project: TimerProject) {
         projects.append(project)
@@ -38,13 +41,6 @@ class TimerData: ObservableObject {
             projects.remove(at: index)
         }
     }
-    
-    func startTimer(for project: TimerProject) {
-        if let index = projects.firstIndex(where: { $0.id == project.id }) {
-            projects[index].sessions.append(TimerSession(activeSeconds: 0, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: project.salary))
-        }
-    }
-    
 }
 
 
@@ -100,31 +96,49 @@ extension TimerData {
 
 extension TimerData {
     
-    private static func getTimerProjectsFileURL() throws -> URL {
-            FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("timerProjects.data")
-        }
+    static func getTimerProjectsFileURL() throws -> URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("test.data")
+    }
     
-    func load() {
-            do {
-                let fileURL = try TimerData.getTimerProjectsFileURL()
-                let data = try Data(contentsOf: fileURL)
-                projects = try JSONDecoder().decode([TimerProject].self, from: data)
-                print("Events loaded: \(projects.count)")
-            } catch {
-                print("Failed to load from file. Backup data used")
-            }
-        }
     
-    func save() {
-            do {
-                let fileURL = try TimerData.getTimerProjectsFileURL()
-                let data = try JSONEncoder().encode(projects)
-                try data.write(to: fileURL, options: [.atomic, .completeFileProtection])
-                print("Events saved")
-            } catch {
-                print("Unable to save")
+    func loadOnlineProjects() async {
+        do {
+            let fetchedProjects = try await supabaseDataStore.load()
+            await MainActor.run {
+                self.projects = fetchedProjects
             }
+            print("Projects loaded: \(projects.count)")
+        } catch {
+            print("Failed to load projects: \(error)")
         }
+    }
+    
+    func addProject(_ project: TimerProject) async {
+        do {
+            let response: TimerProject = try await supabaseDataStore.insertProject(project)
+            await MainActor.run {
+                self.projects.append(response)
+            }
+            print("Projects saved successfully.")
+        } catch {
+            print("Failed to save projects: \(error)")
+        }
+    }
+    
+    func addSession(_ session: TimerSession) async {
+        do {
+            let response: TimerSession = try await supabaseDataStore.insertSession(session)
+            await MainActor.run {
+                if let projectIndex = self.projects.firstIndex(where: { $0.id == response.projectId }) {
+                    self.projects[projectIndex].timerSession.append(response)
+                }
+            }
+            print("Session saved successfully.")
+        } catch {
+            print("Failed to save projects: \(error)")
+        }
+    }
 }
+
 

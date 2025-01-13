@@ -6,6 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1CA0142E2D351ACC00DAFC7F /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 1CA0142D2D351ACC00DAFC7F /* Auth */; };
+		1CA014302D351ACC00DAFC7F /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 1CA0142F2D351ACC00DAFC7F /* Functions */; };
+		1CA014322D351ACC00DAFC7F /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 1CA014312D351ACC00DAFC7F /* PostgREST */; };
+		1CA014342D351ACC00DAFC7F /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 1CA014332D351ACC00DAFC7F /* Realtime */; };
+		1CA014362D351ACC00DAFC7F /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 1CA014352D351ACC00DAFC7F /* Storage */; };
+		1CA014382D351ACC00DAFC7F /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 1CA014372D351ACC00DAFC7F /* Supabase */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		1C33AB1B2D2C7D94009F56DD /* Time Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Time Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +32,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1CA014322D351ACC00DAFC7F /* PostgREST in Frameworks */,
+				1CA014302D351ACC00DAFC7F /* Functions in Frameworks */,
+				1CA014382D351ACC00DAFC7F /* Supabase in Frameworks */,
+				1CA0142E2D351ACC00DAFC7F /* Auth in Frameworks */,
+				1CA014362D351ACC00DAFC7F /* Storage in Frameworks */,
+				1CA014342D351ACC00DAFC7F /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +80,12 @@
 			);
 			name = "Time Tracker";
 			packageProductDependencies = (
+				1CA0142D2D351ACC00DAFC7F /* Auth */,
+				1CA0142F2D351ACC00DAFC7F /* Functions */,
+				1CA014312D351ACC00DAFC7F /* PostgREST */,
+				1CA014332D351ACC00DAFC7F /* Realtime */,
+				1CA014352D351ACC00DAFC7F /* Storage */,
+				1CA014372D351ACC00DAFC7F /* Supabase */,
 			);
 			productName = "Time Tracker";
 			productReference = 1C33AB1B2D2C7D94009F56DD /* Time Tracker.app */;
@@ -94,6 +115,9 @@
 			);
 			mainGroup = 1C33AB122D2C7D94009F56DD;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1CA0142C2D351ACC00DAFC7F /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1C33AB1C2D2C7D94009F56DD /* Products */;
 			projectDirPath = "";
@@ -249,6 +273,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Time Tracker/Time_Tracker.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -276,6 +301,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Time Tracker/Time_Tracker.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -319,6 +345,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1CA0142C2D351ACC00DAFC7F /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1CA0142D2D351ACC00DAFC7F /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1CA0142C2D351ACC00DAFC7F /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		1CA0142F2D351ACC00DAFC7F /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1CA0142C2D351ACC00DAFC7F /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		1CA014312D351ACC00DAFC7F /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1CA0142C2D351ACC00DAFC7F /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		1CA014332D351ACC00DAFC7F /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1CA0142C2D351ACC00DAFC7F /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		1CA014352D351ACC00DAFC7F /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1CA0142C2D351ACC00DAFC7F /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		1CA014372D351ACC00DAFC7F /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1CA0142C2D351ACC00DAFC7F /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1C33AB132D2C7D94009F56DD /* Project object */;
 }
