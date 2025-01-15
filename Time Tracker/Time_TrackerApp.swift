@@ -19,11 +19,11 @@ struct Time_TrackerApp: App {
                         await timerData.loadOnlineProjects()
                     }
                 }
-//                .onDisappear {
-//                    Task {
-//                        await timerData.addProject()
-//                    }
-//                }
+                .onDisappear {
+                    Task {
+                        timerData.saveOfflineProjects()
+                    }
+                }
 //            TestView()
         }
     }

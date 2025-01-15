@@ -25,24 +25,6 @@ struct FilterButton: View {
                             selectedFilter = filter
                         }
                     }
-//                    Button("Favorites") {
-//                        timerData.sortFavorites = true
-//                        timerData.sortSalary = false
-//                        timerData.sortName = false
-//                        selectedFilter = "Favorites"
-//                    }
-//                    Button("Salary") {
-//                        timerData.sortFavorites = false
-//                        timerData.sortSalary = true
-//                        timerData.sortName = false
-//                        selectedFilter = "Salary"
-//                    }
-//                    Button("Name") {
-//                        timerData.sortFavorites = false
-//                        timerData.sortSalary = false
-//                        timerData.sortName = true
-//                        selectedFilter = "Name"
-//                    }
                 } label: {
                     Label("\(selectedFilter)", systemImage: "line.horizontal.3.decrease.circle")
                 }

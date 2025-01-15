@@ -9,22 +9,6 @@ import SwiftUI
 
 class TimerData: ObservableObject {
     @Published var projects: [TimerProject] = [
-        TimerProject(title: "Argon", description: "🇩🇪 German 🇩🇪", salary: 30.0, currency: "$", isFavorite: false, timerSession: [
-            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
-            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
-        ]),
-        TimerProject(title: "Hera", description: "Evaluate 2 AI Responses", salary: 16.0, currency: "$", isFavorite: false, timerSession: [
-            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
-            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
-        ]),
-        TimerProject(title: "Tango", description: "Rate responses as safe / unsafe", salary: 26.0, currency: "$", isFavorite: false, timerSession: [
-            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
-            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
-        ]),
-        TimerProject(title: "Sia", description: "Evaluate AI Responses", salary: 33.0, currency: "€", isFavorite: false, timerSession: [
-            TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
-            TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
-        ]),
     ]
     
     @Published var settings = TimerSettings()
@@ -96,20 +80,15 @@ extension TimerData {
 
 extension TimerData {
     
-    static func getTimerProjectsFileURL() throws -> URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("test.data")
-    }
-    
-    
     func loadOnlineProjects() async {
         do {
             let fetchedProjects = try await supabaseDataStore.load()
             await MainActor.run {
                 self.projects = fetchedProjects
             }
-            print("Projects loaded: \(projects.count)")
+            print("Online projects loaded: \(projects.count)")
         } catch {
+            await loadOfflineProjects()
             print("Failed to load projects: \(error)")
         }
     }
@@ -137,6 +116,52 @@ extension TimerData {
             print("Session saved successfully.")
         } catch {
             print("Failed to save projects: \(error)")
+        }
+    }
+    
+    func setStaticBackupProjects () {
+        self.projects = [
+                TimerProject(title: "Argon", description: "🇩🇪 German 🇩🇪", salary: 30.0, currency: "$", isFavorite: false, timerSession: [
+                    TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
+                    TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
+                ]),
+                TimerProject(title: "Hera", description: "Evaluate 2 AI Responses", salary: 16.0, currency: "$", isFavorite: false, timerSession: [
+                    TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
+                    TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
+                ]),
+                TimerProject(title: "Tango", description: "Rate responses as safe / unsafe", salary: 26.0, currency: "$", isFavorite: false, timerSession: [
+                    TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
+                    TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
+                ]),
+                TimerProject(title: "Sia", description: "Evaluate AI Responses", salary: 33.0, currency: "€", isFavorite: false, timerSession: [
+                    TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
+                    TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
+                ]),
+        ]
+    }
+    
+    func loadOfflineProjects() async {
+        if let savedData = UserDefaults.standard.data(forKey: "projects") {
+            do {
+                try await MainActor.run {
+                    projects = try JSONDecoder().decode([TimerProject].self, from: savedData)
+                }
+                print("Offline projects loaded: \(projects.count)")
+            } catch {
+                setStaticBackupProjects()
+                print("Failed to load offline projects: \(error)")
+                print("Loaded static backup projects.")
+            }
+        }
+    }
+    
+    func saveOfflineProjects() {
+        do {
+            let data = try JSONEncoder().encode(projects)
+            UserDefaults.standard.set(data, forKey: "projects")
+            print("Projects saved offline.")
+        } catch {
+            print("Failed to save offline projects: \(error)")
         }
     }
 }
