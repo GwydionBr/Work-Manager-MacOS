@@ -16,7 +16,7 @@ struct SessionList: View {
 
     // Helper function to generate the grouped sessions
     var groupedSessions: [Int: [Int: [Int: [Date: [TimerSession]]]]]? {
-        Dictionary(grouping: project.timerSession) { session in
+        Dictionary(grouping: project.timerSession ?? []) { session in
             Calendar.current.component(.year, from: session.startTime)
         }.mapValues { sessionsByYear in
             Dictionary(grouping: sessionsByYear) { session in
@@ -34,16 +34,21 @@ struct SessionList: View {
     }
 
     var body: some View {
-        List {
-            if let sessions = groupedSessions {
-                // Iteriere über Jahre
-                ForEach(sessions.keys.sorted(), id: \.self) { year in
-                    yearSection(year: year, sessions: sessions[year] ?? [:])
+        if project.timerSession != nil && project.timerSession != [] {
+            List {
+                if let sessions = groupedSessions {
+                    // Iteriere über Jahre
+                    ForEach(sessions.keys.sorted(), id: \.self) { year in
+                        yearSection(year: year, sessions: sessions[year] ?? [:])
+                    }
                 }
             }
+            .onAppear {
+                expandCurrentMonthAndDay()
+            }
         }
-        .onAppear {
-            expandCurrentMonthAndDay()
+        else {
+            Text("No Sessions")
         }
     }
 
@@ -115,8 +120,8 @@ struct SessionList: View {
                 SessionRow(session: Binding(
                     get: { session },
                     set: { updatedSession in
-                        if let index = project.timerSession.firstIndex(where: { $0.id == session.id }) {
-                            project.timerSession[index] = updatedSession
+                        if let index = project.timerSession!.firstIndex(where: { $0.id == session.id }) {
+                            project.timerSession?[index] = updatedSession
                         }
                     }
                 ))
@@ -175,7 +180,7 @@ struct SessionList: View {
         expandedMonths.insert(currentMonth)
 
         // Find all sessions for today and expand the day if found
-        if project.timerSession.contains(where: { Calendar.current.isDate($0.startTime, inSameDayAs: today) }) {
+        if ((project.timerSession?.contains(where: { Calendar.current.isDate($0.startTime, inSameDayAs: today) })) != nil) {
             expandedDays.insert(today)
         }
     }

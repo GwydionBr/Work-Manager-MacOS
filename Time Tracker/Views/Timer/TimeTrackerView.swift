@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct TimeTrackerView: View {
+    @ObservedObject var timerData: TimerData
     @Binding var project: TimerProject
     @StateObject private var timeTracker: TimeTracker
     
-    init(project: Binding<TimerProject>) {
+    init(project: Binding<TimerProject>, timerData: ObservedObject<TimerData>) {
         self._project = project
         self._timeTracker = StateObject(wrappedValue: TimeTracker(salary: project.wrappedValue.salary, currency: project.wrappedValue.currency))
+        self._timerData = timerData
     }
     
     var body: some View {
@@ -59,8 +61,11 @@ struct TimeTrackerView: View {
                     .padding()
                     Spacer()
                     Button {
-                        let newSession = timeTracker.stopTimer()
-                        project.timerSession.append(newSession)
+                        var newSession = timeTracker.stopTimer()
+                        newSession.projectId = project.id
+                        Task {
+                            await timerData.addSession(newSession)
+                        }
                         
                     } label: {
                         TimerButtonLayout(type: .stop)
@@ -84,6 +89,6 @@ struct TimeTrackerView: View {
     }
 }
 
-#Preview {
-    TimeTrackerView(project: .constant(TimerData().projects[0]))
-}
+//#Preview {
+//    TimeTrackerView(project: Binding<TimerProject>, timerData: <#T##StateObject<TimerData>#>)
+//}

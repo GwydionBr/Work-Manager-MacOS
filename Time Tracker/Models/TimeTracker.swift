@@ -86,8 +86,8 @@ class TimeTracker: ObservableObject {
             startTime: startTime,
             endTime: endTime,
             salary: salary,
-            currency: currency)
-        
+            currency: currency
+        )
         resetTimer()
         
         return newSession

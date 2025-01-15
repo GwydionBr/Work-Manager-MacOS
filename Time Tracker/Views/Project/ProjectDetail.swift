@@ -20,7 +20,7 @@ struct ProjectDetail: View {
                 .layoutPriority(1) // Höhere Priorität, damit diese Ansicht weniger Platz verliert
 
             // Rechte Ansicht
-            TimeTrackerView(project: $project)
+            TimeTrackerView(project: $project, timerData: _timerData)
                 .frame(minWidth: 300, maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2) // Höhere Priorität für TimeTrackerView, um mehr Platz zu bekommen
         }
@@ -37,5 +37,5 @@ struct ProjectDetail: View {
 //        }
 
 #Preview {
-    ProjectDetail(timerData: TimerData(), project: .constant(TimerData().projects[0]))
+    ProjectDetail(timerData: TimerData(), project: .constant(TimerData().getStaticProject()))
 }

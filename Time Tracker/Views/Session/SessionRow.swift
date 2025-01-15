@@ -37,5 +37,5 @@ struct SessionRow: View {
 }
 
 #Preview {
-    SessionRow(session: .constant(TimerData().projects[0].timerSession[0]))
+    SessionRow(session: .constant(TimerData().getStaticSession()))
 }

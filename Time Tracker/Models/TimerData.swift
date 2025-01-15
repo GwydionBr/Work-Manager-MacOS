@@ -80,7 +80,7 @@ extension TimerData {
 
 extension TimerData {
     
-    func loadOnlineProjects() async {
+    func loadProjects() async {
         do {
             let fetchedProjects = try await supabaseDataStore.load()
             await MainActor.run {
@@ -110,14 +110,20 @@ extension TimerData {
             let response: TimerSession = try await supabaseDataStore.insertSession(session)
             await MainActor.run {
                 if let projectIndex = self.projects.firstIndex(where: { $0.id == response.projectId }) {
-                    self.projects[projectIndex].timerSession.append(response)
+                    // Initialisiere `timerSession`, falls es nil ist
+                    if self.projects[projectIndex].timerSession == nil {
+                        self.projects[projectIndex].timerSession = []
+                    }
+                    // Füge die neue Session hinzu
+                    self.projects[projectIndex].timerSession?.append(response)
                 }
             }
             print("Session saved successfully.")
         } catch {
-            print("Failed to save projects: \(error)")
+            print("Failed to save session: \(error)")
         }
     }
+
     
     func setStaticBackupProjects () {
         self.projects = [
@@ -167,3 +173,15 @@ extension TimerData {
 }
 
 
+// MARK: Static Content for the Preview
+
+extension TimerData {
+    
+    func getStaticSession () -> TimerSession {
+        TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$")
+    }
+    
+    func getStaticProject () -> TimerProject {
+        TimerProject(title: "Tango", description: "Rate responses as safe / unsafe", salary: 26.0, currency: "$", isFavorite: false, timerSession: [getStaticSession()])
+    }
+}

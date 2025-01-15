@@ -47,8 +47,10 @@ struct ProjectList: View {
                             }
                             ToolbarItem {
                                 Button {
-                                    timerData.add(newProject)
-                                    isAddingNewProject = false
+                                    Task{
+                                        await timerData.addProject(newProject)
+                                        isAddingNewProject = false
+                                    }
                                 } label: {
                                     Text("Add" )
                                 }

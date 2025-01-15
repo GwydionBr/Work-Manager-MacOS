@@ -14,7 +14,7 @@ struct TimerProject: Codable, Identifiable, Hashable {
     var salary  = 0.0
     var currency = "$"
     var isFavorite = false
-    var timerSession: [TimerSession] = []
+    var timerSession: [TimerSession]?
     
     func getSalary() -> String {
         return roundToMaxTwoDecimals(number: salary)

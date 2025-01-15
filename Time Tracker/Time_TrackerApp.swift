@@ -16,7 +16,7 @@ struct Time_TrackerApp: App {
             ProjectList(timerData: timerData)
                 .onAppear {
                     Task {
-                        await timerData.loadOnlineProjects()
+                        await timerData.loadProjects()
                     }
                 }
                 .onDisappear {
