@@ -54,6 +54,28 @@ struct SupabaseDataStore {
             .execute()
             .value
     }
+    
+    func deleteProject(_ project: TimerProject) async throws {
+        try await supabase!
+            .from("timerSession")
+            .delete()
+            .eq("projectId", value: project.id)
+            .execute()
+        
+        try await supabase!
+            .from("timerProject")
+            .delete()
+            .eq("id", value: project.id)
+            .execute()
+    }
+    
+    func deleteSession(_ session: TimerSession) async throws {
+        try await supabase!
+            .from("timerSession")
+            .delete()
+            .eq("id", value: session.id)
+            .execute()
+    }
 }
 
 

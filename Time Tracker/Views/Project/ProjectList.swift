@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProjectList: View {
     @EnvironmentObject var timerData: TimerData
+    @EnvironmentObject var timeTracker: TimeTracker
     @State private var selection: TimerProject?
     
     @State private var isAddingNewProject = false

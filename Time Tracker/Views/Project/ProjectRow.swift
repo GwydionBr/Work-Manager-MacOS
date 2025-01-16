@@ -11,7 +11,8 @@ struct ProjectRow: View {
     @EnvironmentObject var timerData: TimerData
     @Binding var project: TimerProject
     
-    @State private var showingDeleteConfirmation = false // @State für den Alert
+    @State private var showingDeleteConfirmation = false
+    @State private var isHovered = false
 
     var body: some View {
         HStack {
@@ -32,7 +33,7 @@ struct ProjectRow: View {
             } label: {
                 Label("", systemImage: "trash")
                     .labelStyle(.iconOnly)
-                    .foregroundColor(.red)
+                    .foregroundColor(isHovered ? .red : .clear)
             }
             .background(Color.clear)
             .buttonStyle(PlainButtonStyle())
@@ -42,10 +43,19 @@ struct ProjectRow: View {
                     message: Text("This action cannot be undone."),
                     primaryButton: .destructive(Text("Delete")) {
                         // Projekt löschen
-                        timerData.remove(project)
+                        Task {
+                            await timerData.deleteProject(project)                        }
+                        showingDeleteConfirmation = false // Zustand zurücksetzen
                     },
-                    secondaryButton: .cancel()
+                    secondaryButton: .cancel {
+                        showingDeleteConfirmation = false // Zustand zurücksetzen
+                    }
                 )
+            }
+        }
+        .onHover { hovering in
+            if !showingDeleteConfirmation {
+                isHovered = hovering
             }
         }
     }

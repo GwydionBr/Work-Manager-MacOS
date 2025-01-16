@@ -80,6 +80,8 @@ extension TimerData {
 
 extension TimerData {
     
+    // MARK: - Supabase Data Store
+    
     func loadProjects() async {
         do {
             let fetchedProjects = try await supabaseDataStore.load()
@@ -105,6 +107,18 @@ extension TimerData {
         }
     }
     
+    func deleteProject(_ project: TimerProject) async {
+        do {
+            try await supabaseDataStore.deleteProject(project)
+            await MainActor.run {
+                self.projects.removeAll { $0.id == project.id }
+            }
+            print("Project deleted successfully.")
+        } catch {
+            print("Failed to delete project: \(error)")
+        }
+    }
+    
     func addSession(_ session: TimerSession) async {
         do {
             let response: TimerSession = try await supabaseDataStore.insertSession(session)
@@ -123,7 +137,23 @@ extension TimerData {
             print("Failed to save session: \(error)")
         }
     }
+    
+    func deleteSession(_ session: TimerSession) async {
+        do {
+            try await supabaseDataStore.deleteSession(session)
+            await MainActor.run {
+                if let projectIndex = self.projects.firstIndex(where: { $0.id == session.projectId }) {
+                    self.projects[projectIndex].timerSession?.removeAll { $0.id == session.id }
+                }
+            }
+            print("Session deleted successfully.")
+        } catch {
+            print("Failed to delete session: \(error)")
+        }
+    }
 
+    
+    // MARK: - Local Data Store
     
     func setStaticBackupProjects () {
         self.projects = [

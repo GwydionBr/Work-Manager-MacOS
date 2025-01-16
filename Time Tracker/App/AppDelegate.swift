@@ -47,9 +47,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                     ]
                     let attributedTitle = NSAttributedString(string: button.title, attributes: attributes)
                     button.attributedTitle = attributedTitle
-                    print("Button attributedTitle updated") // Debug
-                } else {
-                    print("Button not found") // Debug
                 }
             }
     }
