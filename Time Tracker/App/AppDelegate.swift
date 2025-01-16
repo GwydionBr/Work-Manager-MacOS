@@ -32,9 +32,29 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    func updateStatusBar(with time: String) {
+    func updateStatusBarText(with time: String) {
         DispatchQueue.main.async { [weak self] in
             self?.statusItem?.button?.title = time
         }
+    }
+    
+    func updateStatusBarColor(with color: NSColor) {
+        print("Updating color to: \(color)") // Debug
+        DispatchQueue.main.async { [weak self] in
+                if let button = self?.statusItem?.button {
+                    let attributes: [NSAttributedString.Key: Any] = [
+                        .foregroundColor: color
+                    ]
+                    let attributedTitle = NSAttributedString(string: button.title, attributes: attributes)
+                    button.attributedTitle = attributedTitle
+                    print("Button attributedTitle updated") // Debug
+                } else {
+                    print("Button not found") // Debug
+                }
+            }
+    }
+    
+    func applicationWillTerminate(_ notification: Notification) {
+        timer?.invalidate()
     }
 }

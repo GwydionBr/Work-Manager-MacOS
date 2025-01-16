@@ -24,7 +24,7 @@ struct TimeTrackerView: View {
                     .onChange(of: timeTracker.activeTime) { oldValue, newValue in
                         // Menüleiste aktualisieren
                         if let appDelegate = NSApp.delegate as? AppDelegate {
-                            appDelegate.updateStatusBar(with: newValue)
+                            appDelegate.updateStatusBarText(with: newValue)
                         }
                     }
                 Text("Active Time")

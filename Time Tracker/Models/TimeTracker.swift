@@ -43,6 +43,7 @@ class TimeTracker: ObservableObject {
         tempStartTime = Date()
         isRunning = true
         isTimerActive = true
+        notifyMenuBarStatus()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.activeSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedActiveSeconds
             self.activeTime = formatTimerSeconds(Int(self.activeSeconds))
@@ -58,6 +59,7 @@ class TimeTracker: ObservableObject {
         tempStartTime = Date()
         timer?.invalidate()
         isRunning = false
+        notifyMenuBarStatus()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.pausedSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedPausedSeconds
             self.pausedTime = formatTimerSeconds(Int(self.pausedSeconds))
@@ -71,6 +73,7 @@ class TimeTracker: ObservableObject {
         tempStartTime = Date()
         timer?.invalidate()
         isRunning = true
+        notifyMenuBarStatus()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.activeSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedActiveSeconds
             self.activeTime = formatTimerSeconds(Int(self.activeSeconds))
@@ -92,6 +95,7 @@ class TimeTracker: ObservableObject {
         )
         resetTimer()
         notifyMenuBar()
+        notifyMenuBarStatus()
         
         return newSession
     }
@@ -114,9 +118,21 @@ class TimeTracker: ObservableObject {
     func notifyMenuBar() {
         if let appDelegate = AppDelegate.shared {
             if isTimerActive {
-                appDelegate.updateStatusBar(with: activeTime)
+                appDelegate.updateStatusBarText(with: activeTime)
             } else {
-                appDelegate.updateStatusBar(with: "")
+                appDelegate.updateStatusBarText(with: "")
+            }
+        } else {
+            print("AppDelegate.shared is nil") // Debug
+        }
+    }
+    
+    func notifyMenuBarStatus() {
+        if let appDelegate = AppDelegate.shared {
+            if isRunning {
+                appDelegate.updateStatusBarColor(with: .black)
+            } else {
+                appDelegate.updateStatusBarColor(with: .red)
             }
         } else {
             print("AppDelegate.shared is nil") // Debug
