@@ -20,12 +20,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        print("AppDelegate initialized") // Debug
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         if let button = statusItem?.button {
             button.action = #selector(statusBarClicked)
-            button.title = "Time Tracker"
+            button.image = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: "Clock")
         }
     }
 

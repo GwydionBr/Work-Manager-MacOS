@@ -91,6 +91,7 @@ class TimeTracker: ObservableObject {
             currency: currency
         )
         resetTimer()
+        notifyMenuBar()
         
         return newSession
     }
@@ -112,7 +113,11 @@ class TimeTracker: ObservableObject {
     
     func notifyMenuBar() {
         if let appDelegate = AppDelegate.shared {
-            appDelegate.updateStatusBar(with: activeTime)
+            if isTimerActive {
+                appDelegate.updateStatusBar(with: activeTime)
+            } else {
+                appDelegate.updateStatusBar(with: "")
+            }
         } else {
             print("AppDelegate.shared is nil") // Debug
         }
