@@ -107,6 +107,20 @@ extension TimerData {
         }
     }
     
+    func updateProject(_ project: TimerProject) async {
+        do {
+            let response: TimerProject = try await supabaseDataStore.updateProject(project)
+            if let index = self.projects.firstIndex(of: project) {
+                await MainActor.run {
+                    self.projects[index] = response
+                }
+            }
+            print("Project updated successfully.")
+        } catch {
+            print("Failed to update project: \(error)")
+        }
+    }
+    
     func deleteProject(_ project: TimerProject) async {
         do {
             try await supabaseDataStore.deleteProject(project)
@@ -138,6 +152,21 @@ extension TimerData {
         }
     }
     
+    func updateSession(_ session: TimerSession) async {
+        do {
+            let response = try await supabaseDataStore.updateSession(session)
+            if let projectIndex = self.projects.firstIndex(where: { $0.id == response.projectId }) {
+                if let sessionIndex = self.projects[projectIndex].timerSession?.firstIndex(where: { $0.id == response.id }) {
+                    await MainActor.run {
+                        self.projects[projectIndex].timerSession?[sessionIndex] = response
+                    }
+                }
+            }
+        } catch {
+            print("Failed to update session: \(error)")
+        }
+    }
+    
     func deleteSession(_ session: TimerSession) async {
         do {
             try await supabaseDataStore.deleteSession(session)
@@ -151,28 +180,28 @@ extension TimerData {
             print("Failed to delete session: \(error)")
         }
     }
-
+    
     
     // MARK: - Local Data Store
     
     func setStaticBackupProjects () {
         self.projects = [
-                TimerProject(title: "Argon", description: "🇩🇪 German 🇩🇪", salary: 30.0, currency: "$", isFavorite: false, timerSession: [
-                    TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
-                    TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
-                ]),
-                TimerProject(title: "Hera", description: "Evaluate 2 AI Responses", salary: 16.0, currency: "$", isFavorite: false, timerSession: [
-                    TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
-                    TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
-                ]),
-                TimerProject(title: "Tango", description: "Rate responses as safe / unsafe", salary: 26.0, currency: "$", isFavorite: false, timerSession: [
-                    TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
-                    TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
-                ]),
-                TimerProject(title: "Sia", description: "Evaluate AI Responses", salary: 33.0, currency: "€", isFavorite: false, timerSession: [
-                    TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
-                    TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
-                ]),
+            TimerProject(title: "Argon", description: "🇩🇪 German 🇩🇪", salary: 30.0, currency: "$", isFavorite: false, timerSession: [
+                TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
+                TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$"),
+            ]),
+            TimerProject(title: "Hera", description: "Evaluate 2 AI Responses", salary: 16.0, currency: "$", isFavorite: false, timerSession: [
+                TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
+                TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 16.0, currency: "$"),
+            ]),
+            TimerProject(title: "Tango", description: "Rate responses as safe / unsafe", salary: 26.0, currency: "$", isFavorite: false, timerSession: [
+                TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
+                TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 26.0, currency: "$"),
+            ]),
+            TimerProject(title: "Sia", description: "Evaluate AI Responses", salary: 33.0, currency: "€", isFavorite: false, timerSession: [
+                TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
+                TimerSession(activeSeconds: 500, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 33.0, currency: "$"),
+            ]),
         ]
     }
     

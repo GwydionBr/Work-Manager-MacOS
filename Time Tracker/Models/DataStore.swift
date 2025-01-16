@@ -9,6 +9,7 @@ import Foundation
 
 
 struct SupabaseDataStore {
+    
     func load() async throws -> [TimerProject] {
         try await supabase!
             .from("timerProject")
@@ -32,7 +33,6 @@ struct SupabaseDataStore {
                 """)
             .execute()
             .value
-        
     }
     
     func insertProject(_ project: TimerProject) async throws -> TimerProject {
@@ -55,6 +55,7 @@ struct SupabaseDataStore {
             .value
     }
     
+    
     func deleteProject(_ project: TimerProject) async throws {
         try await supabase!
             .from("timerSession")
@@ -75,6 +76,27 @@ struct SupabaseDataStore {
             .delete()
             .eq("id", value: session.id)
             .execute()
+    }
+    
+    
+    func updateProject(_ project: TimerProject) async throws -> TimerProject {
+        try await supabase!
+            .from("timerProject")
+            .update(project)
+            .eq("id", value: project.id)
+            .single()
+            .execute()
+            .value
+    }
+    
+    func updateSession(_ session: TimerSession) async throws -> TimerSession {
+        try await supabase!
+            .from("timerSession")
+            .update(session)
+            .eq("id", value: session.id)
+            .single()
+            .execute()
+            .value
     }
 }
 
