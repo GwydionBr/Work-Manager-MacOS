@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProjectList: View {
-    @ObservedObject var timerData: TimerData
+    @EnvironmentObject var timerData: TimerData
     @State private var selection: TimerProject?
     
     @State private var isAddingNewProject = false
@@ -17,10 +17,10 @@ struct ProjectList: View {
     var body: some View {
         NavigationSplitView {
             List(selection: $selection) {
-                FilterButton(timerData: timerData)
+                FilterButton()
                 ForEach(timerData.sortProjects()) { $project in
-                    NavigationLink(destination: ProjectDetail(timerData: timerData, project: $project)) {
-                        ProjectRow(timerData: timerData, project: $project)
+                    NavigationLink(destination: ProjectDetail(project: $project)) {
+                        ProjectRow(project: $project)
                     }
                 }
             }
@@ -67,5 +67,6 @@ struct ProjectList: View {
 }
 
 #Preview {
-    ProjectList(timerData: TimerData())
+    ProjectList()
+        .environmentObject(TimerData())
 }

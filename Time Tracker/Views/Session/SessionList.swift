@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SessionList: View {
-    @ObservedObject var timerData: TimerData
+    @EnvironmentObject var timerData: TimerData
     @Binding var project: TimerProject
 
     @State private var expandedMonths: Set<Int> = []
@@ -189,5 +189,6 @@ struct SessionList: View {
 
 
 #Preview {
-    SessionList(timerData: TimerData(),project: .constant(TimerData().projects[0]))
+    SessionList(project: .constant(TimerData().projects[0]))
+        .environmentObject(TimerData())
 }

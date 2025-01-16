@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FilterButton: View {
-    @ObservedObject var timerData: TimerData
+    @EnvironmentObject var timerData: TimerData
     
     @State private var selectedFilter: String = "Favorites"
     let filters = ["Favorites", "Salary", "Name"]
@@ -38,5 +38,6 @@ struct FilterButton: View {
 
 
 #Preview {
-    FilterButton(timerData: TimerData())
+    FilterButton()
+        .environmentObject(TimerData())
 }

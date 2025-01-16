@@ -5,7 +5,7 @@
 //  Created by Gwydion Braunsdorf on 08.01.25.
 //
 
-import Foundation
+import SwiftUI
 
 class TimeTracker: ObservableObject {
     @Published var moneyEarned: String = "0.00"
@@ -47,6 +47,7 @@ class TimeTracker: ObservableObject {
             self.activeSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedActiveSeconds
             self.activeTime = formatTimerSeconds(Int(self.activeSeconds))
             self.setMoneyEarned()
+            self.notifyMenuBar()
         }
     }
     
@@ -74,6 +75,7 @@ class TimeTracker: ObservableObject {
             self.activeSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedActiveSeconds
             self.activeTime = formatTimerSeconds(Int(self.activeSeconds))
             self.setMoneyEarned()
+            self.notifyMenuBar()
         }
     }
     
@@ -107,6 +109,20 @@ class TimeTracker: ObservableObject {
         activeTime = "00:00"
         pausedTime = "00:00"
     }
+    
+    func notifyMenuBar() {
+        if let appDelegate = AppDelegate.shared {
+            appDelegate.updateStatusBar(with: activeTime)
+        } else {
+            print("AppDelegate.shared is nil") // Debug
+        }
+    }
+    
+    func changeProjectData(salary: Double, currency: String) {
+        self.resetTimer()
+        self.salary = salary
+        self.currency = currency
+    }
 }
 
 
@@ -120,3 +136,5 @@ extension TimeTracker {
         self.moneyEarned =  String(format: "%.2f", value)
     }
 }
+
+

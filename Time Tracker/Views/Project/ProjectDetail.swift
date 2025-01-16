@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct ProjectDetail: View {
-    @ObservedObject var timerData: TimerData
+    @EnvironmentObject var timerData: TimerData
     @Binding var project: TimerProject
 
     var body: some View {
         HSplitView {
             // Linke Ansicht
-            SessionList(timerData: TimerData(), project: $project)
+            SessionList(project: $project)
                 .frame(minWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.gray.opacity(0.2))
                 .layoutPriority(1) // Höhere Priorität, damit diese Ansicht weniger Platz verliert
 
             // Rechte Ansicht
-            TimeTrackerView(project: $project, timerData: _timerData)
+            TimeTrackerView(project: $project)
                 .frame(minWidth: 300, maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2) // Höhere Priorität für TimeTrackerView, um mehr Platz zu bekommen
         }
@@ -37,5 +37,6 @@ struct ProjectDetail: View {
 //        }
 
 #Preview {
-    ProjectDetail(timerData: TimerData(), project: .constant(TimerData().getStaticProject()))
+    ProjectDetail(project: .constant(TimerData().getStaticProject()))
+        .environmentObject(TimerData())
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProjectRow: View {
-    @ObservedObject var timerData: TimerData
+    @EnvironmentObject var timerData: TimerData
     @Binding var project: TimerProject
     
     @State private var showingDeleteConfirmation = false // @State für den Alert
@@ -53,5 +53,6 @@ struct ProjectRow: View {
 
 
 #Preview {
-    ProjectRow(timerData: TimerData(), project: .constant(TimerData().projects[0]))
+    ProjectRow(project: .constant(TimerData().projects[0]))
+        .environmentObject(TimerData())
 }

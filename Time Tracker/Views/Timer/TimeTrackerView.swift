@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct TimeTrackerView: View {
-    @ObservedObject var timerData: TimerData
+    @EnvironmentObject var timerData: TimerData
+    @EnvironmentObject var timeTracker: TimeTracker
     @Binding var project: TimerProject
-    @StateObject private var timeTracker: TimeTracker
     
-    init(project: Binding<TimerProject>, timerData: ObservedObject<TimerData>) {
+    init(project: Binding<TimerProject>) {
         self._project = project
-        self._timeTracker = StateObject(wrappedValue: TimeTracker(salary: project.wrappedValue.salary, currency: project.wrappedValue.currency))
-        self._timerData = timerData
     }
     
     var body: some View {
@@ -23,6 +21,12 @@ struct TimeTrackerView: View {
             VStack {
                 Text("\(timeTracker.activeTime)")
                     .font(.largeTitle)
+                    .onChange(of: timeTracker.activeTime) { oldValue, newValue in
+                        // Menüleiste aktualisieren
+                        if let appDelegate = NSApp.delegate as? AppDelegate {
+                            appDelegate.updateStatusBar(with: newValue)
+                        }
+                    }
                 Text("Active Time")
                     .font(.footnote)
                     .foregroundColor(.gray)
@@ -89,6 +93,7 @@ struct TimeTrackerView: View {
     }
 }
 
-//#Preview {
-//    TimeTrackerView(project: Binding<TimerProject>, timerData: <#T##StateObject<TimerData>#>)
-//}
+#Preview {
+    TimeTrackerView(project: .constant(TimerData().getStaticProject()))
+        .environmentObject(TimerData())
+}
