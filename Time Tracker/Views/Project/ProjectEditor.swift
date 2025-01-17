@@ -31,7 +31,8 @@ struct ProjectEditor: View {
                 TextField("Hourly Rate", value: $project.salary, format: .number)
             }
         }
-        .frame(width: 300, height: 200)
+        .padding()
+        .frame(width: 400, height: 250)
     }
 }
 

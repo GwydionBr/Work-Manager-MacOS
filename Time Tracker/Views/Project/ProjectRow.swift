@@ -15,54 +15,63 @@ struct ProjectRow: View {
     @State private var isHovered = false
 
     var body: some View {
-        HStack {
-            FavoriteButton(isSet: $project.isFavorite)
-                .font(.title)
-            
-            VStack(alignment: .leading, spacing: 5) {
-                Text(project.title)
-                    .fontWeight(.bold)
-                Text("\(project.getSalary()) \(project.currency)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-            Button(role: .destructive) {
-                // Bestätigungs-Alert anzeigen
-                showingDeleteConfirmation = true
-            } label: {
-                Label("", systemImage: "trash")
-                    .labelStyle(.iconOnly)
-                    .foregroundColor(isHovered ? .red : .clear)
-            }
-            .background(Color.clear)
-            .buttonStyle(PlainButtonStyle())
-            .alert(isPresented: $showingDeleteConfirmation) { // Alert anzeigen
-                Alert(
-                    title: Text("Do you really want to delete the project?"),
-                    message: Text("This action cannot be undone."),
-                    primaryButton: .destructive(Text("Delete")) {
-                        // Projekt löschen
+        VStack{
+            HStack {
+                FavoriteButton(isSet: $project.isFavorite)
+                    .font(.title)
+                    .onChange(of: project.isFavorite) {
                         Task {
-                            await timerData.deleteProject(project)                        }
-                        showingDeleteConfirmation = false // Zustand zurücksetzen
-                    },
-                    secondaryButton: .cancel {
-                        showingDeleteConfirmation = false // Zustand zurücksetzen
+                            await timerData.updateProject(project)
+                        }
                     }
-                )
+                
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(project.title)
+                        .fontWeight(.bold)
+                    Text("\(project.getSalary()) \(project.currency)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Button(role: .destructive) {
+                    // Bestätigungs-Alert anzeigen
+                    showingDeleteConfirmation = true
+                } label: {
+                    Label("", systemImage: "trash")
+                        .labelStyle(.iconOnly)
+                        .foregroundColor(isHovered ? .red : .clear)
+                }
+                .background(Color.clear)
+                .padding(.horizontal, 10)
+                .buttonStyle(PlainButtonStyle())
+                .alert(isPresented: $showingDeleteConfirmation) { // Alert anzeigen
+                    Alert(
+                        title: Text("Do you really want to delete the project?"),
+                        message: Text("This action cannot be undone."),
+                        primaryButton: .destructive(Text("Delete")) {
+                            // Projekt löschen
+                            Task {
+                                await timerData.deleteProject(project)                        }
+                            showingDeleteConfirmation = false // Zustand zurücksetzen
+                        },
+                        secondaryButton: .cancel {
+                            showingDeleteConfirmation = false // Zustand zurücksetzen
+                        }
+                    )
+                }
             }
-        }
-        .onHover { hovering in
-            if !showingDeleteConfirmation {
-                isHovered = hovering
+            .onHover { hovering in
+                if !showingDeleteConfirmation {
+                    isHovered = hovering
+                }
             }
+            Divider()
         }
     }
 }
 
 
 #Preview {
-    ProjectRow(project: .constant(TimerData().projects[0]))
+    ProjectRow(project: .constant(TimerData().getStaticProject()))
         .environmentObject(TimerData())
 }
