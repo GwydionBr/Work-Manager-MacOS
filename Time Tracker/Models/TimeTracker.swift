@@ -29,12 +29,6 @@ class TimeTracker: ObservableObject {
     private var timer: Timer?
     
     
-    init(salary: Double = 0.0, currency: String = "$") {
-        self.salary = salary
-        self.currency = currency
-    }
-    
-    
     // MARK: Timer Functions
     
     func startTimer() {

@@ -12,10 +12,6 @@ struct TimeTrackerView: View {
     @EnvironmentObject var timeTracker: TimeTracker
     @Binding var project: TimerProject
     
-    init(project: Binding<TimerProject>) {
-        self._project = project
-    }
-    
     var body: some View {
         VStack {
             VStack {
@@ -40,11 +36,12 @@ struct TimeTrackerView: View {
                     .font(.footnote)
                     .foregroundColor(.gray)
             }
-            Text("\(timeTracker.moneyEarned) €")
+            Text("\(timeTracker.moneyEarned) \(timeTracker.currency)")
                 .padding()
             
             if !timeTracker.isTimerActive && !timeTracker.isRunning {
                 Button {
+                    timeTracker.changeProjectData(salary: project.salary, currency: project.currency)
                     timeTracker.startTimer()
                 } label: {
                     TimerButtonLayout(type: .start)
