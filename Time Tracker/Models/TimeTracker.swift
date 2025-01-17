@@ -124,9 +124,9 @@ class TimeTracker: ObservableObject {
     func notifyMenuBarStatus() {
         if let appDelegate = AppDelegate.shared {
             if isRunning {
-                appDelegate.updateStatusBarColor(with: .black)
+                appDelegate.startTimerClock()
             } else {
-                appDelegate.updateStatusBarColor(with: .red)
+                appDelegate.stopTimerClock()
             }
         } else {
             print("AppDelegate.shared is nil") // Debug

@@ -13,6 +13,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     var statusItem: NSStatusItem?
     var timer: Timer?
     @Published var activeTimeText: String = "00:00"
+    var image1 = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: "Clock")
+    var image2 = NSImage(systemSymbolName: "clock", accessibilityDescription: "Clock")
     
     override init() {
         super.init()
@@ -24,7 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         
         if let button = statusItem?.button {
             button.action = #selector(statusBarClicked)
-            button.image = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: "Clock")
+            button.image = image1
         }
     }
 
@@ -38,17 +40,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
     }
     
-    func updateStatusBarColor(with color: NSColor) {
-        print("Updating color to: \(color)") // Debug
+    func startTimerClock() {
         DispatchQueue.main.async { [weak self] in
-                if let button = self?.statusItem?.button {
-                    let attributes: [NSAttributedString.Key: Any] = [
-                        .foregroundColor: color
-                    ]
-                    let attributedTitle = NSAttributedString(string: button.title, attributes: attributes)
-                    button.attributedTitle = attributedTitle
-                }
+            if let button = self?.statusItem?.button {
+                button.image? = self?.image2 ?? NSImage()
             }
+        }
+    }
+    
+    func stopTimerClock() {
+        DispatchQueue.main.async { [weak self] in
+            if let button = self?.statusItem?.button {
+                button.image? = self?.image1 ?? NSImage()
+            }
+        }
     }
     
     func applicationWillTerminate(_ notification: Notification) {
