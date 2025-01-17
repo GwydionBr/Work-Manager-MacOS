@@ -14,6 +14,8 @@ class TimeTracker: ObservableObject {
     @Published var isRunning = false
     @Published var isTimerActive = false
     
+    var projectId: UUID = UUID()
+    var projectTitle: String = ""
     var salary: Double = 0.0
     var currency: String = "$"
     var startTime: Date = Date()
@@ -85,7 +87,8 @@ class TimeTracker: ObservableObject {
             startTime: startTime,
             endTime: endTime,
             salary: salary,
-            currency: currency
+            currency: currency,
+            projectId: projectId
         )
         resetTimer()
         notifyMenuBar()
@@ -128,15 +131,18 @@ class TimeTracker: ObservableObject {
             } else {
                 appDelegate.stopTimerClock()
             }
+            appDelegate.updateMenuItems()
         } else {
             print("AppDelegate.shared is nil") // Debug
         }
     }
     
-    func changeProjectData(salary: Double, currency: String) {
+    func changeProjectData(salary: Double, currency: String, projectId: UUID, projectName: String) {
         self.resetTimer()
         self.salary = salary
         self.currency = currency
+        self.projectId = projectId
+        self.projectTitle = projectName
     }
 }
 

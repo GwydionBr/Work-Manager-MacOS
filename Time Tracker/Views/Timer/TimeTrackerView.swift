@@ -41,7 +41,7 @@ struct TimeTrackerView: View {
             
             if !timeTracker.isTimerActive && !timeTracker.isRunning {
                 Button {
-                    timeTracker.changeProjectData(salary: project.salary, currency: project.currency)
+                    timeTracker.changeProjectData(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
                     timeTracker.startTimer()
                 } label: {
                     TimerButtonLayout(type: .start)
@@ -62,8 +62,7 @@ struct TimeTrackerView: View {
                     .padding()
                     Spacer()
                     Button {
-                        var newSession = timeTracker.stopTimer()
-                        newSession.projectId = project.id
+                        let newSession = timeTracker.stopTimer()
                         Task {
                             await timerData.addSession(newSession)
                         }

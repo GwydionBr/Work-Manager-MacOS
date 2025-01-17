@@ -16,10 +16,12 @@ struct Time_TrackerApp: App {
     var body: some Scene {
         WindowGroup {
             ProjectList()
-                .environmentObject(timerData) 
+                .environmentObject(timerData)
                 .environmentObject(timeTracker)
                 .onAppear {
                     Task {
+                        appDelegate.timeTracker = timeTracker
+                        appDelegate.timerData = timerData
                         await timerData.loadProjects()
                     }
                 }
@@ -29,11 +31,11 @@ struct Time_TrackerApp: App {
                         timeTracker.resetTimer()
                     }
                 }
-            //            TestView()
         }
         .commands {
             WorkManagerCommands()
         }
     }
 }
+
 
