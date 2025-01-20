@@ -42,8 +42,7 @@ struct SessionRow: View {
                 // Bestätigungs-Alert anzeigen
                 showingDeleteConfirmation = true
             } label: {
-                Label("", systemImage: "trash")
-                    .labelStyle(.iconOnly)
+                DeleteButton()
                     .foregroundColor(isHovered ? .red : .clear)
             }
             .background(Color.clear)

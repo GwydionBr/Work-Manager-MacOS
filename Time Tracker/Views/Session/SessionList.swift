@@ -189,6 +189,6 @@ struct SessionList: View {
 
 
 #Preview {
-    SessionList(project: .constant(TimerData().projects[0]))
+    SessionList(project: .constant(TimerData().getStaticProject()))
         .environmentObject(TimerData())
 }
