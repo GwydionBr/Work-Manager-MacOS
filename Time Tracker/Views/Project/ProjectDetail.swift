@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProjectDetail: View {
     @EnvironmentObject var timerData: TimerData
+    @EnvironmentObject var timeTracker: TimeTracker
     @Binding var project: TimerProject
 
     var body: some View {
@@ -23,11 +24,23 @@ struct ProjectDetail: View {
             TimeTrackerView(project: $project)
                 .frame(minWidth: 300, maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2) // Höhere Priorität für TimeTrackerView, um mehr Platz zu bekommen
+                .onChange(of: project) { oldValue, newValue in
+                    if timeTracker.isTimerActive == false {
+                        timeTracker.changeProjectData(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
+                    }
+                }
+                .onAppear {
+                    // TimeTracker initialisieren
+                    if timeTracker.isTimerActive == false {
+                        timeTracker.changeProjectData(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
+                    }
+                }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationTitle("\(project.title) - \(project.description)")
     }
 }
+    
 
 
 //        HStack {
@@ -39,4 +52,5 @@ struct ProjectDetail: View {
 #Preview {
     ProjectDetail(project: .constant(TimerData().getStaticProject()))
         .environmentObject(TimerData())
+        .environmentObject(TimeTracker())
 }

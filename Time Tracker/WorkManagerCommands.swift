@@ -10,13 +10,13 @@ import SwiftUI
 struct WorkManagerCommands: Commands {
     var body: some Commands {
         SidebarCommands()
-//        CommandMenu("Work") {
-//            Button("Add Project") {
-//                print("Add Project")
-//            }
-//            Button("Add Timer") {
-//                print("Add Timer")
-//            }
-//        }
+        CommandMenu("Work") {
+            Button("Add Project") {
+                print("Add Project")
+            }
+            Button("Add Timer") {
+                print("Add Timer")
+            }
+        }
     }
 }

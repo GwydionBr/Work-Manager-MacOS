@@ -34,7 +34,7 @@ class TimeTracker: ObservableObject {
     // MARK: Timer Functions
     
     func startTimer() {
-        guard !isRunning else { return }
+        guard !isRunning, !isTimerActive, projectTitle != "" else { return }
         startTime = Date()
         tempStartTime = Date()
         isRunning = true
@@ -50,7 +50,7 @@ class TimeTracker: ObservableObject {
     
     
     func pauseTimer() {
-        guard isRunning else { return }
+        guard isRunning, isTimerActive else { return }
         storedActiveSeconds = activeSeconds
         tempStartTime = Date()
         timer?.invalidate()
@@ -64,7 +64,7 @@ class TimeTracker: ObservableObject {
     
     
     func continueTimer() {
-        guard !isRunning else { return }
+        guard !isRunning, isTimerActive else { return }
         storedPausedSeconds = pausedSeconds
         tempStartTime = Date()
         timer?.invalidate()
@@ -79,7 +79,8 @@ class TimeTracker: ObservableObject {
     }
     
     
-    func stopTimer() -> TimerSession {
+    func stopTimer() -> TimerSession? {
+        guard isRunning, isTimerActive else { return nil }
         endTime = Date()
         let newSession = TimerSession(
             activeSeconds: Int(activeSeconds),

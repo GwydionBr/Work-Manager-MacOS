@@ -37,6 +37,41 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         registerShortcuts()
     }
     
+    
+    
+    @objc func statusBarClicked() {
+        // Implement your own action here
+    }
+    
+    
+    
+    func updateStatusBarText(with time: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.statusItem?.button?.title = time
+        }
+    }
+    
+    func startTimerClock() {
+        DispatchQueue.main.async { [weak self] in
+            if let button = self?.statusItem?.button {
+                button.image? = self?.image2 ?? NSImage()
+            }
+        }
+    }
+    
+    func stopTimerClock() {
+        DispatchQueue.main.async { [weak self] in
+            if let button = self?.statusItem?.button {
+                button.image? = self?.image1 ?? NSImage()
+            }
+        }
+    }
+}
+
+
+// MARK: - Menu Setup
+
+extension AppDelegate {
     func setupMenu() {
         // Initial menu setup (updated dynamically later)
         dynamicMenu = NSMenu()
@@ -44,11 +79,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         statusItem?.menu = dynamicMenu
     }
     
+    
+    
     func updateMenuItems() {
         dynamicMenu.removeAllItems()
         
         // Dynamically add menu items based on the timer state
-        if timeTracker?.isRunning == true {
+        if timeTracker?.isRunning == true || timeTracker?.isTimerActive == true {
             let pauseItem = NSMenuItem(title: "Pause Timer", action: #selector(pauseTimerSelected), keyEquivalent: "p")
             pauseItem.keyEquivalentModifierMask = [.command] // Command + P
             dynamicMenu.addItem(pauseItem)
@@ -56,10 +93,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             let stopItem = NSMenuItem(title: "Stop Timer", action: #selector(stopTimerSelected), keyEquivalent: "t")
             stopItem.keyEquivalentModifierMask = [.command] // Command + T
             dynamicMenu.addItem(stopItem)
-        } else {
-            let continueItem = NSMenuItem(title: "Continue Timer", action: #selector(continueTimerSelected), keyEquivalent: "s")
-            continueItem.keyEquivalentModifierMask = [.command] // Command + S
+        } else if timeTracker?.isRunning == false || timeTracker?.isTimerActive == true {
+            let continueItem = NSMenuItem(title: "Continue Timer", action: #selector(continueTimerSelected), keyEquivalent: "k")
+            continueItem.keyEquivalentModifierMask = [.command] // Command + K
             dynamicMenu.addItem(continueItem)
+        } else{
+            if timeTracker?.projectTitle != "" || timeTracker?.isRunning == false || timeTracker?.isTimerActive == false {
+                let startItem = NSMenuItem(title: "Start Timer", action: #selector(startTimerSelected), keyEquivalent: "s")
+                startItem.keyEquivalentModifierMask = [.command] // Command + S
+                dynamicMenu.addItem(startItem)
+            }
         }
         
         dynamicMenu.addItem(NSMenuItem.separator()) // Add a separator
@@ -67,9 +110,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         quitItem.keyEquivalentModifierMask = [.command] // Command + Q
         dynamicMenu.addItem(quitItem)
     }
+}
+
+// MARK: - Timer Actions
+
+extension AppDelegate {
     
-    @objc func statusBarClicked() {
-        // Implement your own action here
+    @objc func startTimerSelected() {
+        timeTracker?.startTimer()
+        updateMenuItems()
     }
     
     @objc func continueTimerSelected() {
@@ -94,28 +143,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @objc func quitApp() {
         NSApp.terminate(nil)
     }
-    
-    func updateStatusBarText(with time: String) {
-        DispatchQueue.main.async { [weak self] in
-            self?.statusItem?.button?.title = time
-        }
-    }
-    
-    func startTimerClock() {
-        DispatchQueue.main.async { [weak self] in
-            if let button = self?.statusItem?.button {
-                button.image? = self?.image2 ?? NSImage()
-            }
-        }
-    }
-    
-    func stopTimerClock() {
-        DispatchQueue.main.async { [weak self] in
-            if let button = self?.statusItem?.button {
-                button.image? = self?.image1 ?? NSImage()
-            }
-        }
-    }
+}
+
+// MARK: - Shortcuts
+
+extension AppDelegate {
     
     private func registerShortcuts() {
         // Add a local monitor for key events within the app's context
@@ -128,18 +160,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             if commandPressed {
                 switch event.charactersIgnoringModifiers {
                 case "p": // Command + P
-                    if self.timeTracker?.isRunning == true {
+                    if self.timeTracker?.isRunning == true || self.timeTracker?.isTimerActive == true {
                         self.pauseTimerSelected()
                         return nil // Consume the event
                     }
                 case "t": // Command + T
-                    if self.timeTracker?.isRunning == true {
+                    if self.timeTracker?.isRunning == true || self.timeTracker?.isTimerActive == true {
                         self.stopTimerSelected()
                         return nil // Consume the event
                     }
-                case "s": // Command + S
-                    if self.timeTracker?.isRunning == false {
+                case "k": // Command + S
+                    if self.timeTracker?.isRunning == false || self.timeTracker?.isTimerActive == true {
                         self.continueTimerSelected()
+                        return nil // Consume the event
+                    }
+                case "s": // Command + S
+                    if self.timeTracker?.isRunning == false || self.timeTracker?.isTimerActive == false {
+                        self.startTimerSelected()
                         return nil // Consume the event
                     }
                 default:

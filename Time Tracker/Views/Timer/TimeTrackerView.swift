@@ -11,9 +11,14 @@ struct TimeTrackerView: View {
     @EnvironmentObject var timerData: TimerData
     @EnvironmentObject var timeTracker: TimeTracker
     @Binding var project: TimerProject
+
     
     var body: some View {
         VStack {
+            Text("\(timeTracker.projectTitle)")
+                .font(.title)
+                
+                
             VStack {
                 Text("\(timeTracker.activeTime)")
                     .font(.largeTitle)
@@ -41,7 +46,6 @@ struct TimeTrackerView: View {
             
             if !timeTracker.isTimerActive && !timeTracker.isRunning {
                 Button {
-                    timeTracker.changeProjectData(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
                     timeTracker.startTimer()
                 } label: {
                     TimerButtonLayout(type: .start)
@@ -62,11 +66,11 @@ struct TimeTrackerView: View {
                     .padding()
                     Spacer()
                     Button {
-                        let newSession = timeTracker.stopTimer()
-                        Task {
-                            await timerData.addSession(newSession)
+                        if let newSession = timeTracker.stopTimer() {
+                            Task {
+                                await timerData.addSession(newSession)
+                            }
                         }
-                        
                     } label: {
                         TimerButtonLayout(type: .stop)
                     }
@@ -92,4 +96,5 @@ struct TimeTrackerView: View {
 #Preview {
     TimeTrackerView(project: .constant(TimerData().getStaticProject()))
         .environmentObject(TimerData())
+        .environmentObject(TimeTracker())
 }
