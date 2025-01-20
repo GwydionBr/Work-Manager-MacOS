@@ -107,10 +107,10 @@ extension TimerData {
         }
     }
     
-    func updateProject(_ project: TimerProject) async {
+    func updateProject(_ project: TimerProjectChanges) async {
         do {
-            let response: TimerProject = try await supabaseDataStore.updateProject(project)
-            if let index = self.projects.firstIndex(of: project) {
+            if let index = self.projects.firstIndex(where: { $0.id == project.id }) {
+                let response: TimerProject = try await supabaseDataStore.updateProject(project)
                 await MainActor.run {
                     self.projects[index] = response
                 }

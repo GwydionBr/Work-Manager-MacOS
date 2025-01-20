@@ -21,7 +21,7 @@ struct ProjectRow: View {
                     .font(.title)
                     .onChange(of: project.isFavorite) {
                         Task {
-                            await timerData.updateProject(project)
+                            await timerData.updateProject(TimerProjectChanges(id: project.id, isFavorite: project.isFavorite))
                         }
                     }
                 

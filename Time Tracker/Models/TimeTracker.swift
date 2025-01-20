@@ -66,7 +66,6 @@ class TimeTracker: ObservableObject {
         startPausedTimerLoop()
     }
     
-    
     func resumeTimer() {
         guard state == .paused else { return }
         storePausedSeconds()
@@ -75,7 +74,6 @@ class TimeTracker: ObservableObject {
         state = .running
         startTimerLoop()
     }
-    
     
     func stopTimer() -> TimerSession? {
         guard state != .stopped else { return nil }
@@ -95,7 +93,6 @@ class TimeTracker: ObservableObject {
         return newSession
     }
     
-    
     func resetTimer() {
         timer?.invalidate()
         state = .stopped
@@ -108,6 +105,7 @@ class TimeTracker: ObservableObject {
         activeTime = "00:00"
         pausedTime = "00:00"
     }
+    
     
     // MARK: - Private Methods
     private func startTimerLoop() {
