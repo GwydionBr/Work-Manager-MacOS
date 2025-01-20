@@ -7,86 +7,83 @@
 
 import SwiftUI
 
+
+// MARK: - TimerState
+enum TimerState {
+    case stopped
+    case running
+    case paused
+}
+
+// MARK: - TimeTracker
 class TimeTracker: ObservableObject {
+    // MARK: - Published Properties
     @Published var moneyEarned: String = "0.00"
     @Published var activeTime: String = "00:00"
     @Published var pausedTime: String = "00:00"
-    @Published var isRunning = false
-    @Published var isTimerActive = false
+    @Published private(set) var state: TimerState = .stopped
+    @Published private(set) var projectTitle: String = ""
+    @Published private(set) var currency: String = "$"
+
+    // MARK: - Project Data
+    private var projectId: UUID = UUID()
+    private var salary: Double = 0.0
     
-    var projectId: UUID = UUID()
-    var projectTitle: String = ""
-    var salary: Double = 0.0
-    var currency: String = "$"
-    var startTime: Date = Date()
-    var tempStartTime: Date = Date()
-    var endTime: Date = Date()
-    
-    var activeSeconds: TimeInterval = 0
-    var storedActiveSeconds: TimeInterval = 0
-    
-    var pausedSeconds: TimeInterval = 0
-    var storedPausedSeconds: TimeInterval = 0
-    
+    // MARK: - Timer Variables
+    private var startTime: Date = Date()
+    private var tempStartTime: Date = Date()
+    private var activeSeconds: TimeInterval = 0
+    private var storedActiveSeconds: TimeInterval = 0
+    private var pausedSeconds: TimeInterval = 0
+    private var storedPausedSeconds: TimeInterval = 0
     private var timer: Timer?
     
     
-    // MARK: Timer Functions
+    // MARK: - Public Methods
+    func configureProject(salary: Double, currency: String, projectId: UUID, projectName: String) {
+        self.resetTimer()
+        self.salary = salary
+        self.currency = currency
+        self.projectId = projectId
+        self.projectTitle = projectName
+    }
     
     func startTimer() {
-        guard !isRunning, !isTimerActive, projectTitle != "" else { return }
+        guard state == .stopped, projectTitle != "" else { return }
         startTime = Date()
         tempStartTime = Date()
-        isRunning = true
-        isTimerActive = true
+        state = .running
         notifyMenuBarStatus()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            self.activeSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedActiveSeconds
-            self.activeTime = formatTimerSeconds(Int(self.activeSeconds))
-            self.setMoneyEarned()
-            self.notifyMenuBar()
-        }
+        startTimerLoop()
     }
-    
     
     func pauseTimer() {
-        guard isRunning, isTimerActive else { return }
-        storedActiveSeconds = activeSeconds
+        guard state == .running else { return }
+        storeActiveSeconds()
         tempStartTime = Date()
-        timer?.invalidate()
-        isRunning = false
+        state = .paused
         notifyMenuBarStatus()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            self.pausedSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedPausedSeconds
-            self.pausedTime = formatTimerSeconds(Int(self.pausedSeconds))
-        }
+        startPausedTimerLoop()
     }
     
     
-    func continueTimer() {
-        guard !isRunning, isTimerActive else { return }
-        storedPausedSeconds = pausedSeconds
+    func resumeTimer() {
+        guard state == .paused else { return }
+        storePausedSeconds()
         tempStartTime = Date()
-        timer?.invalidate()
-        isRunning = true
         notifyMenuBarStatus()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            self.activeSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedActiveSeconds
-            self.activeTime = formatTimerSeconds(Int(self.activeSeconds))
-            self.setMoneyEarned()
-            self.notifyMenuBar()
-        }
+        state = .running
+        startTimerLoop()
     }
     
     
     func stopTimer() -> TimerSession? {
-        guard isRunning, isTimerActive else { return nil }
-        endTime = Date()
+        guard state != .stopped else { return nil }
         let newSession = TimerSession(
             activeSeconds: Int(activeSeconds),
             pausedSeconds: Int(pausedSeconds),
             startTime: startTime,
-            endTime: endTime,
+            endTime: Date(),
             salary: salary,
             currency: currency,
             projectId: projectId
@@ -100,22 +97,50 @@ class TimeTracker: ObservableObject {
     
     
     func resetTimer() {
-        isRunning = false
         timer?.invalidate()
+        state = .stopped
         activeSeconds = 0
         pausedSeconds = 0
         storedActiveSeconds = 0
         storedPausedSeconds = 0
         salary = 0.0
         moneyEarned = "0.00"
-        isTimerActive = false
         activeTime = "00:00"
         pausedTime = "00:00"
     }
     
-    func notifyMenuBar() {
+    // MARK: - Private Methods
+    private func startTimerLoop() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.activeSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedActiveSeconds
+            self.activeTime = formatTimerSeconds(Int(self.activeSeconds))
+            self.setMoneyEarned()
+            self.notifyMenuBar()
+        }
+    }
+    
+    private func startPausedTimerLoop() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.pausedSeconds = Date().timeIntervalSince(self.tempStartTime) + self.storedPausedSeconds
+            self.pausedTime = formatTimerSeconds(Int(self.pausedSeconds))
+        }
+    }
+    
+    private func storeActiveSeconds() {
+        storedActiveSeconds = activeSeconds
+    }
+    
+    private func storePausedSeconds() {
+        storedPausedSeconds = pausedSeconds
+    }
+    
+    private func notifyMenuBar() {
         if let appDelegate = AppDelegate.shared {
-            if isTimerActive {
+            if state == .running {
                 appDelegate.updateStatusBarText(with: activeTime)
             } else {
                 appDelegate.updateStatusBarText(with: "")
@@ -125,9 +150,9 @@ class TimeTracker: ObservableObject {
         }
     }
     
-    func notifyMenuBarStatus() {
+    private func notifyMenuBarStatus() {
         if let appDelegate = AppDelegate.shared {
-            if isRunning {
+            if state == .running {
                 appDelegate.startTimerClock()
             } else {
                 appDelegate.stopTimerClock()
@@ -138,13 +163,7 @@ class TimeTracker: ObservableObject {
         }
     }
     
-    func changeProjectData(salary: Double, currency: String, projectId: UUID, projectName: String) {
-        self.resetTimer()
-        self.salary = salary
-        self.currency = currency
-        self.projectId = projectId
-        self.projectTitle = projectName
-    }
+    
 }
 
 

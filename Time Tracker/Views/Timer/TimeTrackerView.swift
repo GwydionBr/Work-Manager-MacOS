@@ -11,14 +11,14 @@ struct TimeTrackerView: View {
     @EnvironmentObject var timerData: TimerData
     @EnvironmentObject var timeTracker: TimeTracker
     @Binding var project: TimerProject
-
+    
     
     var body: some View {
         VStack {
             Text("\(timeTracker.projectTitle)")
                 .font(.title)
-                
-                
+            
+            
             VStack {
                 Text("\(timeTracker.activeTime)")
                     .font(.largeTitle)
@@ -44,7 +44,9 @@ struct TimeTrackerView: View {
             Text("\(timeTracker.moneyEarned) \(timeTracker.currency)")
                 .padding()
             
-            if !timeTracker.isTimerActive && !timeTracker.isRunning {
+            switch timeTracker.state {
+                
+            case .stopped:
                 Button {
                     timeTracker.startTimer()
                 } label: {
@@ -53,7 +55,7 @@ struct TimeTrackerView: View {
                 .background(Color.clear)
                 .buttonStyle(PlainButtonStyle())
                 .padding()
-            } else if timeTracker.isTimerActive && timeTracker.isRunning {
+            case .running:
                 HStack {
                     Spacer()
                     Button {
@@ -79,9 +81,9 @@ struct TimeTrackerView: View {
                     .padding()
                     Spacer()
                 }
-            } else if timeTracker.isTimerActive && !timeTracker.isRunning {
+            case .paused:
                 Button {
-                    timeTracker.continueTimer()
+                    timeTracker.resumeTimer()
                 } label: {
                     TimerButtonLayout(type: .start)
                 }

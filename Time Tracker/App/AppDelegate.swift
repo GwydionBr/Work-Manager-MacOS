@@ -10,13 +10,14 @@ import SwiftUI
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     static var shared: AppDelegate? = nil
     
+    var timerData = TimerData()
+    var timeTracker = TimeTracker()
+    
     var statusItem: NSStatusItem?
     var timer: Timer?
     var image1 = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: "Clock")
     var image2 = NSImage(systemSymbolName: "clock", accessibilityDescription: "Clock")
     
-    var timeTracker: TimeTracker?
-    var timerData: TimerData?
     var dynamicMenu = NSMenu()
     
     override init() {
@@ -85,7 +86,8 @@ extension AppDelegate {
         dynamicMenu.removeAllItems()
         
         // Dynamically add menu items based on the timer state
-        if timeTracker?.isRunning == true || timeTracker?.isTimerActive == true {
+        switch timeTracker.state {
+        case .running:
             let pauseItem = NSMenuItem(title: "Pause Timer", action: #selector(pauseTimerSelected), keyEquivalent: "p")
             pauseItem.keyEquivalentModifierMask = [.command] // Command + P
             dynamicMenu.addItem(pauseItem)
@@ -93,16 +95,14 @@ extension AppDelegate {
             let stopItem = NSMenuItem(title: "Stop Timer", action: #selector(stopTimerSelected), keyEquivalent: "t")
             stopItem.keyEquivalentModifierMask = [.command] // Command + T
             dynamicMenu.addItem(stopItem)
-        } else if timeTracker?.isRunning == false || timeTracker?.isTimerActive == true {
+        case .paused:
             let continueItem = NSMenuItem(title: "Continue Timer", action: #selector(continueTimerSelected), keyEquivalent: "k")
             continueItem.keyEquivalentModifierMask = [.command] // Command + K
             dynamicMenu.addItem(continueItem)
-        } else{
-            if timeTracker?.projectTitle != "" || timeTracker?.isRunning == false || timeTracker?.isTimerActive == false {
-                let startItem = NSMenuItem(title: "Start Timer", action: #selector(startTimerSelected), keyEquivalent: "s")
-                startItem.keyEquivalentModifierMask = [.command] // Command + S
-                dynamicMenu.addItem(startItem)
-            }
+        case .stopped:
+            let startItem = NSMenuItem(title: "Start Timer", action: #selector(startTimerSelected), keyEquivalent: "s")
+            startItem.keyEquivalentModifierMask = [.command] // Command + S
+            dynamicMenu.addItem(startItem)
         }
         
         dynamicMenu.addItem(NSMenuItem.separator()) // Add a separator
@@ -117,26 +117,26 @@ extension AppDelegate {
 extension AppDelegate {
     
     @objc func startTimerSelected() {
-        timeTracker?.startTimer()
+        timeTracker.startTimer()
         updateMenuItems()
     }
     
     @objc func continueTimerSelected() {
-        timeTracker?.continueTimer()
+        timeTracker.resumeTimer()
         updateMenuItems()
     }
     
     @objc func stopTimerSelected() {
-        if let newSession = timeTracker?.stopTimer() {
+        if let newSession = timeTracker.stopTimer() {
             Task {
-                await timerData?.addSession(newSession)
+                await timerData.addSession(newSession)
             }
         }
         updateMenuItems()
     }
     
     @objc func pauseTimerSelected() {
-        timeTracker?.pauseTimer()
+        timeTracker.pauseTimer()
         updateMenuItems()
     }
     
@@ -160,24 +160,20 @@ extension AppDelegate {
             if commandPressed {
                 switch event.charactersIgnoringModifiers {
                 case "p": // Command + P
-                    if self.timeTracker?.isRunning == true || self.timeTracker?.isTimerActive == true {
+                    if timeTracker.state == .running {
                         self.pauseTimerSelected()
-                        return nil // Consume the event
                     }
                 case "t": // Command + T
-                    if self.timeTracker?.isRunning == true || self.timeTracker?.isTimerActive == true {
+                    if timeTracker.state == .running {
                         self.stopTimerSelected()
-                        return nil // Consume the event
                     }
                 case "k": // Command + S
-                    if self.timeTracker?.isRunning == false || self.timeTracker?.isTimerActive == true {
+                    if timeTracker.state == .paused {
                         self.continueTimerSelected()
-                        return nil // Consume the event
                     }
                 case "s": // Command + S
-                    if self.timeTracker?.isRunning == false || self.timeTracker?.isTimerActive == false {
+                    if timeTracker.state == .stopped {
                         self.startTimerSelected()
-                        return nil // Consume the event
                     }
                 default:
                     break

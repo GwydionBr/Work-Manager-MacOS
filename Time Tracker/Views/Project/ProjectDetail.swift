@@ -25,14 +25,14 @@ struct ProjectDetail: View {
                 .frame(minWidth: 300, maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2) // Höhere Priorität für TimeTrackerView, um mehr Platz zu bekommen
                 .onChange(of: project) { oldValue, newValue in
-                    if timeTracker.isTimerActive == false {
-                        timeTracker.changeProjectData(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
+                    if timeTracker.state == .stopped {
+                        timeTracker.configureProject(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
                     }
                 }
                 .onAppear {
                     // TimeTracker initialisieren
-                    if timeTracker.isTimerActive == false {
-                        timeTracker.changeProjectData(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
+                    if timeTracker.state == .stopped {
+                        timeTracker.configureProject(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
                     }
                 }
         }

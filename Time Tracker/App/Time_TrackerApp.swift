@@ -10,25 +10,21 @@ import SwiftUI
 @main
 struct Time_TrackerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject private var timerData = TimerData()
-    @StateObject private var timeTracker = TimeTracker()
     
     var body: some Scene {
         WindowGroup {
             ProjectList()
-                .environmentObject(timerData)
-                .environmentObject(timeTracker)
+                .environmentObject(appDelegate.timerData)
+                .environmentObject(appDelegate.timeTracker)
                 .onAppear {
                     Task {
-                        appDelegate.timeTracker = timeTracker
-                        appDelegate.timerData = timerData
-                        await timerData.loadProjects()
+                        await appDelegate.timerData.loadProjects()
                     }
                 }
                 .onDisappear {
                     Task {
-                        timerData.saveOfflineProjects()
-                        timeTracker.resetTimer()
+                        appDelegate.timerData.saveOfflineProjects()
+                        appDelegate.timeTracker.resetTimer()
                     }
                 }
         }
