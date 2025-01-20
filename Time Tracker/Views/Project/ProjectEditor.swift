@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 
 struct ProjectEditor: View {
     @Binding var project: TimerProject

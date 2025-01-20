@@ -70,8 +70,8 @@ class TimeTracker: ObservableObject {
         guard state == .paused else { return }
         storePausedSeconds()
         tempStartTime = Date()
-        notifyMenuBarStatus()
         state = .running
+        notifyMenuBarStatus()
         startTimerLoop()
     }
     

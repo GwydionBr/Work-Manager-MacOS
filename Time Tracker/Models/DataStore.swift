@@ -79,7 +79,7 @@ struct SupabaseDataStore {
     }
     
     
-    func updateProject(_ project: TimerProjectChanges) async throws -> TimerProject {
+    func updateProject(_ project: TimerProjectChanges) async throws {
         try await supabase!
             .from("timerProject")
             .update(project)

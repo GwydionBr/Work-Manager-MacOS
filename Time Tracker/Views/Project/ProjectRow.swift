@@ -13,6 +13,11 @@ struct ProjectRow: View {
     
     @State private var showingDeleteConfirmation = false
     @State private var isHovered = false
+    @State private var isEditingProject = false
+    @State private var isHoveringEdit = false // Für Edit-Button
+    @State private var isHoveringDelete = false // Für Delete-Button
+    @State private var newProject = TimerProject()
+    
 
     var body: some View {
         VStack{
@@ -25,6 +30,7 @@ struct ProjectRow: View {
                         }
                     }
                 
+                
                 VStack(alignment: .leading, spacing: 5) {
                     Text(project.title)
                         .fontWeight(.bold)
@@ -33,16 +39,32 @@ struct ProjectRow: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
+                Button {
+                    newProject = TimerProject(id: project.id, title: project.title, description: project.description, salary: project.salary, currency: project.currency)
+                    isEditingProject = true
+                } label: {
+                    EditButton()
+                        .foregroundColor(isHovered ? .white : .clear)
+                }
+                .buttonStyle(PlainButtonStyle())
+                
+                .padding(.leading, 10)
+                .onHover { hovering in
+                    isHoveringEdit = hovering
+                                }
+                
                 Button(role: .destructive) {
                     // Bestätigungs-Alert anzeigen
                     showingDeleteConfirmation = true
                 } label: {
-                    Label("", systemImage: "trash")
-                        .labelStyle(.iconOnly)
+                    DeleteButton()
                         .foregroundColor(isHovered ? .red : .clear)
                 }
                 .background(Color.clear)
-                .padding(.horizontal, 10)
+                .onHover { hovering in
+                                    isHoveringDelete = hovering
+                                }
+                .padding(.trailing, 10)
                 .buttonStyle(PlainButtonStyle())
                 .alert(isPresented: $showingDeleteConfirmation) { // Alert anzeigen
                     Alert(
@@ -66,6 +88,35 @@ struct ProjectRow: View {
                 }
             }
             Divider()
+        }
+        .sheet(isPresented: $isEditingProject) {
+            NavigationStack {
+                ProjectEditor(project: $newProject, isNew: false)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                isEditingProject = false
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Save") {
+                                Task {
+                                    await timerData.updateProject(
+                                        TimerProjectChanges(
+                                            id: newProject.id,
+                                            title: newProject.title,
+                                            description: newProject.description,
+                                            salary: newProject.salary,
+                                            currency: newProject.currency
+                                        )
+                                    )
+                                    isEditingProject = false
+                                }
+                            }
+                        }
+                    }
+            }
+            
         }
     }
 }

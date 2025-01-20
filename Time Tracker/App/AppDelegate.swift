@@ -15,8 +15,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     var statusItem: NSStatusItem?
     var timer: Timer?
-    var image1 = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: "Clock")
-    var image2 = NSImage(systemSymbolName: "clock", accessibilityDescription: "Clock")
+    var imageTimerStop = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: "Clock")
+    var imageTimerRunning = NSImage(systemSymbolName: "clock", accessibilityDescription: "Clock")
     
     var dynamicMenu = NSMenu()
     
@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         
         if let button = statusItem?.button {
             button.action = #selector(statusBarClicked)
-            button.image = image1
+            button.image = imageTimerStop
         }
         
         setupMenu()
@@ -54,16 +54,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     func startTimerClock() {
         DispatchQueue.main.async { [weak self] in
-            if let button = self?.statusItem?.button {
-                button.image? = self?.image2 ?? NSImage()
+            guard let self = self else { return }
+            if let button = self.statusItem?.button {
+                button.image? = self.imageTimerRunning ?? NSImage()
             }
         }
     }
     
     func stopTimerClock() {
         DispatchQueue.main.async { [weak self] in
-            if let button = self?.statusItem?.button {
-                button.image? = self?.image1 ?? NSImage()
+            guard let self = self else { return }
+            if let button = self.statusItem?.button {
+                button.image? = self.imageTimerStop ?? NSImage()
             }
         }
     }

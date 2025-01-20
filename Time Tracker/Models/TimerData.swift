@@ -110,9 +110,23 @@ extension TimerData {
     func updateProject(_ project: TimerProjectChanges) async {
         do {
             if let index = self.projects.firstIndex(where: { $0.id == project.id }) {
-                let response: TimerProject = try await supabaseDataStore.updateProject(project)
+                
+                try await supabaseDataStore.updateProject(project)
                 await MainActor.run {
-                    self.projects[index] = response
+                    
+                    // Wende die Änderungen an
+                    if let title = project.title {
+                        self.projects[index].title = title
+                    }
+                    if let description = project.description {
+                        self.projects[index].description = description
+                    }
+                    if let salary = project.salary {
+                        self.projects[index].salary = salary
+                    }
+                    if let currency = project.currency {
+                        self.projects[index].currency = currency
+                    }
                 }
             }
             print("Project updated successfully.")
