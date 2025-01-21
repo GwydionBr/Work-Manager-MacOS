@@ -7,27 +7,22 @@
 
 import SwiftUI
 
-struct ProjectEditor: View {
+struct ProjectEditorView: View {
     @Binding var project: TimerProject
     @State var isNew = false
-    
-    let currencies = ["$", "€", "£", "¥"]
-    @State private var hourlyRateInput: String = ""
     
     var body: some View {
         Form {
             Section(header: Text("Project Details")) {
                 TextField("Title", text: $project.title)
                 TextField("Description", text: $project.description)
+                TextField("Hourly Rate", value: $project.salary, format: .number)
                 
                 Picker("Currency", selection: $project.currency) {
-                    ForEach(currencies, id: \.self) { currency in
+                    ForEach(Constants.Currency.currencies, id: \.self) { currency in
                         Text(currency).tag(currency)
                     }
                 }
-                
-                
-                TextField("Hourly Rate", value: $project.salary, format: .number)
             }
         }
         .padding()
@@ -37,5 +32,5 @@ struct ProjectEditor: View {
 
 
 #Preview {
-    ProjectEditor(project: .constant(TimerProject()), isNew: true)
+    ProjectEditorView(project: .constant(TimerProject()), isNew: true)
 }
