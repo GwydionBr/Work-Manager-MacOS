@@ -14,8 +14,6 @@ struct ProjectRow: View {
     @State private var showingDeleteConfirmation = false
     @State private var isHovered = false
     @State private var isEditingProject = false
-    @State private var isHoveringEdit = false // Für Edit-Button
-    @State private var isHoveringDelete = false // Für Delete-Button
     @State private var newProject = TimerProject()
     
 
@@ -40,7 +38,7 @@ struct ProjectRow: View {
                 }
                 Spacer()
                 Button {
-                    newProject = TimerProject(id: project.id, title: project.title, description: project.description, salary: project.salary, currency: project.currency)
+                    newProject = project
                     isEditingProject = true
                 } label: {
                     EditButton()
@@ -49,9 +47,6 @@ struct ProjectRow: View {
                 .buttonStyle(PlainButtonStyle())
                 
                 .padding(.leading, 10)
-                .onHover { hovering in
-                    isHoveringEdit = hovering
-                                }
                 
                 Button(role: .destructive) {
                     // Bestätigungs-Alert anzeigen
@@ -61,10 +56,6 @@ struct ProjectRow: View {
                         .foregroundColor(isHovered ? .red : .clear)
                 }
                 .background(Color.clear)
-                .onHover { hovering in
-                                    isHoveringDelete = hovering
-                                }
-                .padding(.trailing, 10)
                 .buttonStyle(PlainButtonStyle())
                 .alert(isPresented: $showingDeleteConfirmation) { // Alert anzeigen
                     Alert(
@@ -91,7 +82,7 @@ struct ProjectRow: View {
         }
         .sheet(isPresented: $isEditingProject) {
             NavigationStack {
-                ProjectEditor(project: $newProject, isNew: false)
+                ProjectEditorView(project: $newProject)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {

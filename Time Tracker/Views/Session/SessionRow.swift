@@ -13,6 +13,8 @@ struct SessionRow: View {
     
     @State private var showingDeleteConfirmation = false
     @State private var isHovered = false
+    @State private var isEditingSession = false
+    @State private var newSession = TimerSession()
     
     var body: some View {
         HStack {
@@ -37,6 +39,15 @@ struct SessionRow: View {
                 session.currency == "$" ? "$ \(session.getEarnedMoney())" : "\(session.getEarnedMoney()) \(session.currency)"
             )
             .padding(.horizontal, 10)
+            
+            Button {
+                newSession = session
+                isEditingSession = true
+            } label: {
+                EditButton()
+                    .foregroundColor(isHovered ? .gray : .clear)
+            }
+            .buttonStyle(PlainButtonStyle())
             
             Button(role: .destructive) {
                 // Bestätigungs-Alert anzeigen
@@ -70,6 +81,38 @@ struct SessionRow: View {
             if !showingDeleteConfirmation {
                 isHovered = hovering
             }
+        }
+        .sheet(isPresented: $isEditingSession) {
+            NavigationStack {
+                SessionEditorView(session: $newSession)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                isEditingSession = false
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Save") {
+                                Task {
+                                    await timerData.updateSession(
+                                        TimerSessionChanges(
+                                            id: newSession.id,
+                                            activeSeconds: newSession.activeSeconds,
+                                            pausedSeconds: newSession.pausedSeconds,
+                                            startTime: newSession.startTime,
+                                            endTime: newSession.endTime,
+                                            salary: newSession.salary,
+                                            currency: newSession.currency,
+                                            projectId: newSession.projectId
+                                        )
+                                    )
+                                    isEditingSession = false
+                                }
+                            }
+                        }
+                    }
+            }
+            
         }
     }
 }

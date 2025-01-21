@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ProjectEditorView: View {
     @Binding var project: TimerProject
-    @State var isNew = false
     
     var body: some View {
         Form {
@@ -32,5 +31,5 @@ struct ProjectEditorView: View {
 
 
 #Preview {
-    ProjectEditorView(project: .constant(TimerProject()), isNew: true)
+    ProjectEditorView(project: .constant(TimerProject()))
 }

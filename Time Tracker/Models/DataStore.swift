@@ -89,7 +89,7 @@ struct SupabaseDataStore {
             .value
     }
     
-    func updateSession(_ session: TimerSession) async throws -> TimerSession {
+    func updateSession(_ session: TimerSessionChanges) async throws -> TimerSession {
         try await supabase!
             .from("timerSession")
             .update(session)

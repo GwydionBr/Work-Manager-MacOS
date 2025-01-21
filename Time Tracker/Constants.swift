@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+struct Constants {
+    struct Currency {
+        static let currencies = ["$", "€", "£", "¥"]
+        static let defaultCurrency = "$"
+    }
+}

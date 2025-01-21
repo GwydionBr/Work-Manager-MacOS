@@ -39,7 +39,7 @@ struct ProjectList: View {
             }
             .sheet(isPresented: $isAddingNewProject) {
                 NavigationStack {
-                    ProjectEditor(project: $newProject, isNew: true)
+                    ProjectEditorView(project: $newProject)
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Cancel") {
