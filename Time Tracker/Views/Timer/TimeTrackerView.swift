@@ -96,7 +96,7 @@ struct TimeTrackerView: View {
 }
 
 #Preview {
-    TimeTrackerView(project: .constant(TimerData().getStaticProject()))
+    TimeTrackerView(project: .constant(TimerData.getStaticProject()))
         .environmentObject(TimerData())
         .environmentObject(TimeTracker())
 }

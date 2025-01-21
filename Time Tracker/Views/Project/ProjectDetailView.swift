@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProjectDetail: View {
+struct ProjectDetailView: View {
     @EnvironmentObject var timerData: TimerData
     @EnvironmentObject var timeTracker: TimeTracker
     @Binding var project: TimerProject
@@ -42,15 +42,8 @@ struct ProjectDetail: View {
 }
     
 
-
-//        HStack {
-//            SessionList(timerData: TimerData(), project: $project)
-//            TimeTrackerView()
-//                .padding()
-//        }
-
 #Preview {
-    ProjectDetail(project: .constant(TimerData().getStaticProject()))
+    ProjectDetailView(project: .constant(TimerData().getStaticProject()))
         .environmentObject(TimerData())
         .environmentObject(TimeTracker())
 }

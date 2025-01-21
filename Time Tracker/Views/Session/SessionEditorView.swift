@@ -29,5 +29,5 @@ struct SessionEditorView: View {
 }
 
 #Preview {
-    SessionEditorView(session: .constant(TimerData().getStaticSession()))
+    SessionEditorView(session: .constant(TimerData.getStaticSession()))
 }

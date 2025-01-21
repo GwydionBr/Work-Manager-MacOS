@@ -255,11 +255,11 @@ extension TimerData {
 
 extension TimerData {
     
-    func getStaticSession () -> TimerSession {
+    static func getStaticSession () -> TimerSession {
         TimerSession(activeSeconds: 300, pausedSeconds: 0, startTime: Date(), endTime: Date(), salary: 30.0, currency: "$")
     }
     
-    func getStaticProject () -> TimerProject {
+    static func getStaticProject () -> TimerProject {
         TimerProject(title: "Tango", description: "Rate responses as safe / unsafe", salary: 26.0, currency: "$", isFavorite: false, timerSession: [getStaticSession()])
     }
 }

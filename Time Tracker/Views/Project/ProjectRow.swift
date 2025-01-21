@@ -36,6 +36,7 @@ struct ProjectRow: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                .padding(.horizontal, 5)
                 Spacer()
                 Button {
                     newProject = project
@@ -114,6 +115,6 @@ struct ProjectRow: View {
 
 
 #Preview {
-    ProjectRow(project: .constant(TimerData().getStaticProject()))
+    ProjectRow(project: .constant(TimerData.getStaticProject()))
         .environmentObject(TimerData())
 }
