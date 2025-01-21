@@ -8,42 +8,33 @@
 import SwiftUI
 
 struct ProjectDetailView: View {
-    @EnvironmentObject var timerData: TimerData
-    @EnvironmentObject var timeTracker: TimeTracker
     @Binding var project: TimerProject
+    
+    @State private var selectedTab: Tab = .details // Aktueller Tab
 
     var body: some View {
-        HSplitView {
-            // Linke Ansicht
-            SessionList(project: $project)
-                .frame(minWidth: 450, maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.gray.opacity(0.2))
-                .layoutPriority(1) // Höhere Priorität, damit diese Ansicht weniger Platz verliert
-
-            // Rechte Ansicht
-            TimeTrackerView(project: $project)
-                .frame(minWidth: 300, maxWidth: .infinity, maxHeight: .infinity)
-                .layoutPriority(2) // Höhere Priorität für TimeTrackerView, um mehr Platz zu bekommen
-                .onChange(of: project) { oldValue, newValue in
-                    if timeTracker.state == .stopped {
-                        timeTracker.configureProject(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
-                    }
+        TabView (selection: $selectedTab) {
+            ProjectWorkView(project: $project)
+                .tag(Tab.details)
+                .tabItem {
+                    Label("Details", systemImage: "info.circle")
                 }
-                .onAppear {
-                    // TimeTracker initialisieren
-                    if timeTracker.state == .stopped {
-                        timeTracker.configureProject(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
-                    }
+            ProjectAnalysisView(project: $project)
+                .tag(Tab.analysis)
+                .tabItem {
+                    Label("Analysis", systemImage: "chart.pie")
                 }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .navigationTitle("\(project.title) - \(project.description)")
+            
     }
+}
+
+enum Tab {
+    case details
+    case analysis
 }
     
 
 #Preview {
-    ProjectDetailView(project: .constant(TimerData().getStaticProject()))
-        .environmentObject(TimerData())
-        .environmentObject(TimeTracker())
+    ProjectDetailView(project: .constant(TimerData.getStaticProject()))
 }

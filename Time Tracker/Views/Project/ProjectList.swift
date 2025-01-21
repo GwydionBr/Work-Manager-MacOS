@@ -20,7 +20,7 @@ struct ProjectList: View {
             List(selection: $selection) {
                 FilterButton()
                 ForEach(timerData.sortProjects()) { $project in
-                    NavigationLink(destination: ProjectDetail(project: $project)) {
+                    NavigationLink(destination: ProjectDetailView(project: $project)) {
                         ProjectRow(project: $project)
                     }
                 }
@@ -63,7 +63,6 @@ struct ProjectList: View {
         } detail: {
             Text("Select a project")
         }
-        
     }
 }
 

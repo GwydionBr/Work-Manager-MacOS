@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ProjectAnalysisView: View {
+    @Binding var project: TimerProject
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    ProjectAnalysisView()
+    ProjectAnalysisView(project: .constant(TimerData.getStaticProject()))
 }
