@@ -14,7 +14,6 @@ struct ProjectAnalysisView: View {
     var body: some View {
         if let sessions = project.timerSession {
             let salaryPerMonth = TimerDataAnalysis.getEarningsPerMonth(sessions: sessions)
-            Text("Earnings per month")
             Chart {
                 ForEach(salaryPerMonth.sorted(by: { $0.key < $1.key }), id: \.key) { key, value in
                     BarMark(
