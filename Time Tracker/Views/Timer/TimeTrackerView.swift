@@ -91,6 +91,16 @@ struct TimeTrackerView: View {
                 .buttonStyle(PlainButtonStyle())
                 .padding()
             }
+            if timeTracker.state != .stopped {
+                Button {
+                    timeTracker.cancelTimer()
+                } label: {
+                    Text("Cancel")
+                        .foregroundColor(.red)
+                        .padding(5)
+                }
+                .padding(.top, 25)
+            }
         }
     }
 }

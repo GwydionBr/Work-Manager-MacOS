@@ -87,10 +87,12 @@ class TimeTracker: ObservableObject {
             projectId: projectId
         )
         resetTimer()
-        notifyMenuBar()
-        notifyMenuBarStatus()
         
         return newSession
+    }
+    
+    func cancelTimer() {
+        resetTimer()
     }
     
     func resetTimer() {
@@ -104,6 +106,8 @@ class TimeTracker: ObservableObject {
         moneyEarned = "0.00"
         activeTime = "00:00"
         pausedTime = "00:00"
+        notifyMenuBar()
+        notifyMenuBarStatus()
     }
     
     
