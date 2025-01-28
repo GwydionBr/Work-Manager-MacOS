@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TimerSettings : Codable, Hashable {
+struct Settings : Codable, Hashable {
     
     var filter = "Favorite"
     var filterOptions = [
