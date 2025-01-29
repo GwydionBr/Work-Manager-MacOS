@@ -16,3 +16,5 @@ struct Settings : Codable, Hashable {
         "Salary",
     ]
 }
+
+

@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1C33AB1A2D2C7D94009F56DD"
-               BuildableName = "Time Tracker.app"
-               BlueprintName = "Time Tracker"
-               ReferencedContainer = "container:Time Tracker.xcodeproj">
+               BuildableName = "Work Manager Test.app"
+               BlueprintName = "Work Manager Test"
+               ReferencedContainer = "container:Work Manager Test.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1C33AB1A2D2C7D94009F56DD"
-            BuildableName = "Time Tracker.app"
-            BlueprintName = "Time Tracker"
-            ReferencedContainer = "container:Time Tracker.xcodeproj">
+            BuildableName = "Work Manager Test.app"
+            BlueprintName = "Work Manager Test"
+            ReferencedContainer = "container:Work Manager Test.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -74,9 +74,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1C33AB1A2D2C7D94009F56DD"
-            BuildableName = "Time Tracker.app"
-            BlueprintName = "Time Tracker"
-            ReferencedContainer = "container:Time Tracker.xcodeproj">
+            BuildableName = "Work Manager Test.app"
+            BlueprintName = "Work Manager Test"
+            ReferencedContainer = "container:Work Manager Test.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
@@ -85,6 +85,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "Work-Manager"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

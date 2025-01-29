@@ -16,13 +16,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1C33AB1B2D2C7D94009F56DD /* Time Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Time Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C33AB1B2D2C7D94009F56DD /* Work Manager Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Work Manager Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1C33AB1D2D2C7D94009F56DD /* Time Tracker */ = {
+		1C33AB1D2D2C7D94009F56DD /* Work-Manager */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Time Tracker";
+			path = "Work-Manager";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -47,7 +47,7 @@
 		1C33AB122D2C7D94009F56DD = {
 			isa = PBXGroup;
 			children = (
-				1C33AB1D2D2C7D94009F56DD /* Time Tracker */,
+				1C33AB1D2D2C7D94009F56DD /* Work-Manager */,
 				1C33AB1C2D2C7D94009F56DD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,7 +55,7 @@
 		1C33AB1C2D2C7D94009F56DD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1C33AB1B2D2C7D94009F56DD /* Time Tracker.app */,
+				1C33AB1B2D2C7D94009F56DD /* Work Manager Test.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -63,9 +63,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1C33AB1A2D2C7D94009F56DD /* Time Tracker */ = {
+		1C33AB1A2D2C7D94009F56DD /* Work Manager Test */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1C33AB2A2D2C7D97009F56DD /* Build configuration list for PBXNativeTarget "Time Tracker" */;
+			buildConfigurationList = 1C33AB2A2D2C7D97009F56DD /* Build configuration list for PBXNativeTarget "Work Manager Test" */;
 			buildPhases = (
 				1C33AB172D2C7D94009F56DD /* Sources */,
 				1C33AB182D2C7D94009F56DD /* Frameworks */,
@@ -76,9 +76,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				1C33AB1D2D2C7D94009F56DD /* Time Tracker */,
+				1C33AB1D2D2C7D94009F56DD /* Work-Manager */,
 			);
-			name = "Time Tracker";
+			name = "Work Manager Test";
 			packageProductDependencies = (
 				1CA0142D2D351ACC00DAFC7F /* Auth */,
 				1CA0142F2D351ACC00DAFC7F /* Functions */,
@@ -88,7 +88,7 @@
 				1CA014372D351ACC00DAFC7F /* Supabase */,
 			);
 			productName = "Time Tracker";
-			productReference = 1C33AB1B2D2C7D94009F56DD /* Time Tracker.app */;
+			productReference = 1C33AB1B2D2C7D94009F56DD /* Work Manager Test.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -106,7 +106,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1C33AB162D2C7D94009F56DD /* Build configuration list for PBXProject "Time Tracker" */;
+			buildConfigurationList = 1C33AB162D2C7D94009F56DD /* Build configuration list for PBXProject "Work Manager Test" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -123,7 +123,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1C33AB1A2D2C7D94009F56DD /* Time Tracker */,
+				1C33AB1A2D2C7D94009F56DD /* Work Manager Test */,
 			);
 		};
 /* End PBXProject section */
@@ -291,7 +291,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.gwydion.Time-Tracker";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gwydion.Work-Manager";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -322,7 +322,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.gwydion.Time-Tracker";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gwydion.Work-Manager";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -332,7 +332,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1C33AB162D2C7D94009F56DD /* Build configuration list for PBXProject "Time Tracker" */ = {
+		1C33AB162D2C7D94009F56DD /* Build configuration list for PBXProject "Work Manager Test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1C33AB282D2C7D97009F56DD /* Debug */,
@@ -341,7 +341,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1C33AB2A2D2C7D97009F56DD /* Build configuration list for PBXNativeTarget "Time Tracker" */ = {
+		1C33AB2A2D2C7D97009F56DD /* Build configuration list for PBXNativeTarget "Work Manager Test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1C33AB2B2D2C7D97009F56DD /* Debug */,
