@@ -16,7 +16,7 @@ struct ProjectWorkView: View {
         HSplitView {
             // Linke Ansicht
             SessionList(project: $project)
-                .frame(minWidth: 450, maxWidth: .infinity, maxHeight: .infinity)
+                .frame(minWidth: 500, maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.gray.opacity(0.2))
                 .layoutPriority(1) // Höhere Priorität, damit diese Ansicht weniger Platz verliert
 
