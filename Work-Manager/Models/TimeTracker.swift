@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-
+ 
 // MARK: - TimerState
 enum TimerState {
     case stopped
@@ -27,6 +27,7 @@ class TimeTracker: ObservableObject {
 
     // MARK: - Project Data
     private var projectId: UUID = UUID()
+    private var userId: UUID = UUID()
     private var salary: Double = 0.0
     
     // MARK: - Timer Variables
@@ -40,12 +41,13 @@ class TimeTracker: ObservableObject {
     
     
     // MARK: - Public Methods
-    func configureProject(salary: Double, currency: String, projectId: UUID, projectName: String) {
+    func configureProject(salary: Double, currency: String, projectId: UUID, projectName: String, userId: UUID) {
         self.resetTimer()
         self.salary = salary
         self.currency = currency
         self.projectId = projectId
         self.projectTitle = projectName
+        self.userId = userId
     }
     
     func startTimer() {
@@ -84,7 +86,8 @@ class TimeTracker: ObservableObject {
             endTime: Date(),
             salary: salary,
             currency: currency,
-            projectId: projectId
+            projectId: projectId,
+            userId: UUID()
         )
         resetTimer()
         
@@ -171,7 +174,6 @@ class TimeTracker: ObservableObject {
 // MARK: Timer Logic
 
 extension TimeTracker {
-    
     
     func setMoneyEarned() {
         let value = self.activeSeconds * self.salary / 3600

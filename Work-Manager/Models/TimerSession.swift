@@ -16,6 +16,7 @@ struct TimerSession : Codable, Identifiable, Hashable {
     var salary: Double  = 10 // in $/h
     var currency: String = Constants.Currency.defaultCurrency
     var projectId = UUID()
+    var userId: UUID = UUID()
     
     func getDate() -> String {
         let dateFormatter = DateFormatter()
@@ -34,6 +35,16 @@ struct TimerSession : Codable, Identifiable, Hashable {
     func getEarnedMoney() -> String {
         let value = Double(activeSeconds) * salary / 3600
         return String(format: "%.2f", value)
+    }
+    
+    enum CodingKeys : String, CodingKey {
+        case id, salary, currency
+        case activeSeconds = "active_seconds"
+        case pausedSeconds = "paused_seconds"
+        case startTime = "start_time"
+        case endTime = "end_time"
+        case projectId = "project_id"
+        case userId = "user_id"
     }
 }
 
@@ -72,7 +83,12 @@ struct TimerSessionChanges: Encodable {
         }
     }
     
-    enum CodingKeys: String, CodingKey {
-        case id, activeSeconds, pausedSeconds, startTime, endTime, salary, currency, projectId
+    enum CodingKeys : String, CodingKey {
+        case id, salary, currency
+        case activeSeconds = "active_seconds"
+        case pausedSeconds = "paused_seconds"
+        case startTime = "start_time"
+        case endTime = "end_time"
+        case projectId = "project_id"
     }
 }

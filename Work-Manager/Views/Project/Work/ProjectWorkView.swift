@@ -26,13 +26,13 @@ struct ProjectWorkView: View {
                 .layoutPriority(2) // Höhere Priorität für TimeTrackerView, um mehr Platz zu bekommen
                 .onChange(of: project) { oldValue, newValue in
                     if timeTracker.state == .stopped {
-                        timeTracker.configureProject(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
+                        timeTracker.configureProject(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title, userId: project.userId)
                     }
                 }
                 .onAppear {
                     // TimeTracker initialisieren
                     if timeTracker.state == .stopped {
-                        timeTracker.configureProject(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title)
+                        timeTracker.configureProject(salary: project.salary, currency: project.currency, projectId: project.id, projectName: project.title, userId: project.userId)
                     }
                 }
         }

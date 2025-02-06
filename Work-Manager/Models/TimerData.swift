@@ -8,9 +8,7 @@
 import SwiftUI
 
 class TimerData: ObservableObject {
-    @Published var projects: [TimerProject] = [
-    ]
-    
+    @Published var projects: [TimerProject] = []
     @Published var settings = Settings()
     
     private var supabaseDataStore = SupabaseDataStore()

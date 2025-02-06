@@ -68,8 +68,9 @@ struct TimeTrackerView: View {
                     .padding()
                     Spacer()
                     Button {
-                        if let newSession = timeTracker.stopTimer() {
+                        if var newSession = timeTracker.stopTimer() {
                             Task {
+                                newSession.userId = project.userId
                                 await timerData.addSession(newSession)
                             }
                         }

@@ -10,23 +10,24 @@ import SwiftUI
 @main
 struct Time_TrackerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var authModel = AuthModel(supabase)
     
     var body: some Scene {
         WindowGroup {
-            ProjectList()
+            RootView()
                 .environmentObject(appDelegate.timerData)
                 .environmentObject(appDelegate.timeTracker)
-                .onAppear {
+                .environmentObject(authModel)
+                .onOpenURL { url in
                     Task {
-                        await appDelegate.timerData.loadProjects()
+                        do {
+                            try await authModel.supabase.auth.session(from: url)
+                        } catch {
+                            print("Error: \(error)")
+                        }
                     }
                 }
-                .onDisappear {
-                    Task {
-                        appDelegate.timerData.saveOfflineProjects()
-                        appDelegate.timeTracker.resetTimer()
-                    }
-                }
+                
         }
         .commands {
             WorkManagerCommands()

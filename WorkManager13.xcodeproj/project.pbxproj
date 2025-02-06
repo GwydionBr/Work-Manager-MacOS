@@ -17,6 +17,7 @@
 
 /* Begin PBXFileReference section */
 		1C33AB1B2D2C7D94009F56DD /* WorkManager13.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkManager13.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1CDB63352D52B4390062825F /* WorkManager13-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "WorkManager13-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -47,6 +48,7 @@
 		1C33AB122D2C7D94009F56DD = {
 			isa = PBXGroup;
 			children = (
+				1CDB63352D52B4390062825F /* WorkManager13-Info.plist */,
 				1C33AB1D2D2C7D94009F56DD /* Work-Manager */,
 				1C33AB1C2D2C7D94009F56DD /* Products */,
 			);
@@ -283,6 +285,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WorkManager13-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Work Manager";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -314,6 +317,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WorkManager13-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Work Manager";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
