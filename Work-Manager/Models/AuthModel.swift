@@ -17,6 +17,7 @@ enum AuthAction: String, CaseIterable {
 final class AuthModel: ObservableObject {
     
     @Published var isAuthenticated = false
+    @Published var isLoading = true
     @Published var authAction: AuthAction = .signUp
     
     @Published var showingAuthView = false
@@ -53,12 +54,14 @@ final class AuthModel: ObservableObject {
     }
     
     func isUserAuthenticated() async {
+        try? await Task.sleep(nanoseconds: 500_000_000)
         do {
             _ = try await supabase.auth.session.user
             isAuthenticated = true
         } catch {
             isAuthenticated = false
         }
+        isLoading = false
     }
     
     func authorize() async throws {

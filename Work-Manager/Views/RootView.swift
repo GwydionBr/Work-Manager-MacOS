@@ -27,6 +27,9 @@ struct RootView: View {
                             timeTracker.resetTimer()
                         }
                     }
+                
+            } else if authModel.isLoading {
+                ProgressView()
             } else {
                 AuthView(authModel: authModel)
             }
