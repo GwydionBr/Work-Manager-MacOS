@@ -1,0 +1,146 @@
+{
+    "currency": [
+        "options": [
+            {
+                "name": "USD",
+                "symbol": "$"
+            },
+            {
+                "name": "EUR",
+                "symbol": "€"
+            },
+            {
+                "name": "GBP",
+                "symbol": "£"
+            },
+            {
+                "name": "JPY",
+                "symbol": "¥"
+            },
+            {
+                "name": "AUD",
+                "symbol": "$"
+            },
+            {
+                "name": "CAD",
+                "symbol": "$"
+            },
+            {
+                "name": "CHF",
+                "symbol": "Fr"
+            },
+            {
+                "name": "CNY",
+                "symbol": "¥"
+            },
+            {
+                "name": "SEK",
+                "symbol": "kr"
+            },
+            {
+                "name": "NZD",
+                "symbol": "$"
+            },
+            {
+                "name": "KRW",
+                "symbol": "₩"
+            },
+            {
+                "name": "SGD",
+                "symbol": "$"
+            },
+            {
+                "name": "NOK",
+                "symbol": "kr"
+            },
+            {
+                "name": "MXN",
+                "symbol": "$"
+            },
+            {
+                "name": "INR",
+                "symbol": "₹"
+            },
+            {
+                "name": "RUB",
+                "symbol": "₽"
+            },
+            {
+                "name": "ZAR",
+                "symbol": "R"
+            },
+            {
+                "name": "TRY",
+                "symbol": "₺"
+            },
+            {
+                "name": "BRL",
+                "symbol": "R$"
+            },
+            {
+                "name": "TWD",
+                "symbol": "NT$"
+            },
+            {
+                "name": "DKK",
+                "symbol": "kr"
+            },
+            {
+                "name": "PLN",
+                "symbol": "zł"
+            },
+            {
+                "name": "THB",
+                "symbol": "฿"
+            },
+            {
+                "name": "IDR",
+                "symbol": "Rp"
+            },
+            {
+                "name": "HUF",
+                "symbol": "Ft"
+            },
+            {
+                "name": "CZK",
+                "symbol": "Kč"
+            },
+            {
+                "name": "ILS",
+                "symbol": "₪"
+            },
+            {
+                "name": "CLP",
+                "symbol": "$"
+            },
+            {
+                "name": "PHP",
+                "symbol": "₱"
+            },
+            {
+                "name": "AED",
+                "symbol": "د.إ"
+            }
+        ],
+        "default": [
+            "option": "USD"
+        ]
+    ],
+    "rounding": [
+        "options": [
+            "seconds",
+            "minutes",
+            "quarterHours",
+            "halfHours",
+            "hours",
+            ],
+        "roundDirection": [
+            "up",
+            "down",
+        ],
+        "default": [
+            "option": "minutes",
+            "roundDirection": "up"
+        ]
+    ],
+}

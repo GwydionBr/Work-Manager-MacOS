@@ -19,9 +19,9 @@ struct FilterButton: View {
             VStack (alignment: .leading){
                 // Filter Menu
                 Menu {
-                    ForEach($timerData.settings.filterOptions, id: \.self) { $filter in
+                    ForEach($timerData.deviceSettings.filterOptions, id: \.self) { $filter in
                         Button(filter) {
-                            timerData.settings.filter = filter
+                            timerData.deviceSettings.filter = filter
                             selectedFilter = filter
                         }
                     }

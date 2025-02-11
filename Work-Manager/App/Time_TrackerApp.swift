@@ -8,9 +8,9 @@
 import SwiftUI
 
 @main
-struct Time_TrackerApp: App {
+struct TimeTrackerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject private var authModel = AuthModel(supabase)
+    @StateObject private var authModel = AuthModel()
     
     var body: some Scene {
         WindowGroup {
@@ -21,16 +21,20 @@ struct Time_TrackerApp: App {
                 .onOpenURL { url in
                     Task {
                         do {
-                            try await authModel.supabase.auth.session(from: url)
+                            try await supabase.auth.session(from: url)
                         } catch {
                             print("Error: \(error)")
                         }
                     }
                 }
-                
         }
         .commands {
             WorkManagerCommands()
+        }
+        Settings {
+            SettingsRootView()
+                .environmentObject(appDelegate.timerData)
+                .environmentObject(authModel)
         }
     }
 }

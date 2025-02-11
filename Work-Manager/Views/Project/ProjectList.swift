@@ -25,7 +25,7 @@ struct ProjectList: View {
                     }
                 }
             }
-            .animation(.default, value: timerData.settings.filter)
+            .animation(.default, value: timerData.deviceSettings.filter)
             .navigationTitle("Projects")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {

@@ -23,11 +23,9 @@ final class AuthModel: ObservableObject {
     @Published var showingAuthView = false
     @Published var email = ""
     @Published var password = ""
+    @Published var userId : UUID?
     
-    let supabase: SupabaseClient
-    
-    init(_ supabase: SupabaseClient) {
-        self.supabase = supabase
+    init() {
     }
     
     // MARK: - Authentication

@@ -1,8 +1,8 @@
 //
-//  DataStore.swift
-//  Time Tracker
+//  SupabaseDataStore.swift
+//  WorkManager13
 //
-//  Created by Gwydion Braunsdorf on 13.01.25.
+//  Created by Gwydion Braunsdorf on 08.02.25.
 //
 
 import Foundation
@@ -13,11 +13,11 @@ enum Table {
     static let timerSession = "timerSession"
 }
 
+/// Verwaltet alle Supabase-CRUD-Operationen.
 struct SupabaseDataStore {
     
     func load() async throws -> [TimerProject] {
         let user = try await supabase.auth.session.user
-        print(user.id)
         
         let projects: [TimerProject] = try await supabase
             .from(Table.timerProject)
@@ -59,7 +59,7 @@ struct SupabaseDataStore {
     }
     
     func insertSession(_ session: TimerSession) async throws -> TimerSession {
-       try await supabase
+        try await supabase
             .from(Table.timerSession)
             .insert(session)
             .select()
@@ -67,7 +67,6 @@ struct SupabaseDataStore {
             .execute()
             .value
     }
-    
     
     func deleteProject(_ project: TimerProject) async throws {
         try await supabase
@@ -91,7 +90,6 @@ struct SupabaseDataStore {
             .execute()
     }
     
-    
     func updateProject(_ project: TimerProjectChanges) async throws {
         try await supabase
             .from(Table.timerProject)
@@ -110,29 +108,5 @@ struct SupabaseDataStore {
             .single()
             .execute()
             .value
-    }
-}
-
-
-
-// MARK: - Local Data Store
-
-struct LocalDataStore {
-    
-    private func getTimerProjectsFileURL() throws -> URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("test1.data")
-    }
-    
-    func load() async throws -> [TimerProject] {
-        let fileURL = try getTimerProjectsFileURL()
-        let data = try Data(contentsOf: fileURL)
-        return try JSONDecoder().decode([TimerProject].self, from: data)
-    }
-
-    func save(projects: [TimerProject]) async throws {
-        let fileURL = try getTimerProjectsFileURL()
-        let data = try JSONEncoder().encode(projects)
-        try data.write(to: fileURL, options: [.atomic, .completeFileProtection])
     }
 }

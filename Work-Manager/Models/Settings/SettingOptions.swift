@@ -1,14 +1,13 @@
 //
-//  TimerSettings.swift
-//  Time Tracker
+//  SettingOptions.swift
+//  WorkManager13
 //
-//  Created by Gwydion Braunsdorf on 07.01.25.
+//  Created by Gwydion Braunsdorf on 08.02.25.
 //
 
 import Foundation
 
-struct Settings : Codable, Hashable {
-    
+struct SettingOptions: Codable, Hashable {
     var filter = "Favorite"
     var filterOptions = [
         "Favorite",
@@ -16,5 +15,3 @@ struct Settings : Codable, Hashable {
         "Salary",
     ]
 }
-
-

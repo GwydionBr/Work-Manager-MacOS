@@ -9,7 +9,6 @@ import Foundation
 
 struct TimerDataAnalysis {
     
-    
     static func getEarningsPerDay(sessions: [TimerSession]) -> [String: Double] {
             var dailyEarnings: [String: Double] = [:]
             
